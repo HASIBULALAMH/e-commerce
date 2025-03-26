@@ -36,4 +36,11 @@ class CategoryController extends Controller
 
 }
 
+
+
+    public function delete($id){
+        $cat=Category::find($id);
+        $cat->delete();
+        return redirect()->back();
+    }
 }

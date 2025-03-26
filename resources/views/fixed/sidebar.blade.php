@@ -35,7 +35,8 @@
                 <!-- Leftbar User -->
                 <div class="leftbar-user">
                     <a href="pages-profile.html">
-                        <img src="assets/images/users/avatar-1.jpg" alt="user-image" height="42" class="rounded-circle shadow-sm">
+                        <img src="assets/images/users/avatar-1.jpg" alt="user-image" height="42"
+                            class="rounded-circle shadow-sm">
                         <span class="leftbar-user-name mt-2">Dominic Keller</span>
                     </a>
                 </div>
@@ -46,29 +47,46 @@
                     <li class="side-nav-title">Navigation</li>
 
                     <li class="side-nav-item">
-                        <a  href="{{url('/')}}"  class="side-nav-link">
+                        <a href="{{url('/')}}" class="side-nav-link">
                             <i class="uil-home-alt"></i>
                             <span class="badge bg-success float-end">5</span>
                             <span> Dashboards </span>
                         </a>
-                       
+
                     </li>
 
-                      <li class="side-nav-item">
-                        <a href="{{url('/category_list')}}" class="side-nav-link">
+                    <li class="side-nav-item">
+                        <a href="{{route('category_list')}}" class="side-nav-link">
                             <i class="uil-calender"></i>
                             <span> Category </span>
                         </a>
                     </li>
 
+                    <li class="side-nav-item">
+                        <a href="{{route('product_list')}}" class="side-nav-link">
+                            <i class="uil-calender"></i>
+                            <span> product </span>
+                        </a>
+                    </li>
 
-                    
 
-                    
+                    <li class="side-nav-item">
+                        <a href="{{route('brand_list')}}" class="side-nav-link">
+                            <i class="uil-calender"></i>
+                            <span> Brand</span>
+                        </a>
+                    </li>
 
 
-                   
-                  
+
+
+
+
+
+
+
+
+
 
 
                 </ul>
