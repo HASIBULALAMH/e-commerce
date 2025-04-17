@@ -47,7 +47,7 @@
                     <li class="side-nav-title">Navigation</li>
 
                     <li class="side-nav-item">
-                        <a href="{{url('/')}}" class="side-nav-link">
+                        <a href="{{route('deshboard')}}" class="side-nav-link">
                             <i class="uil-home-alt"></i>
                             <span class="badge bg-success float-end">5</span>
                             <span> Dashboards </span>
