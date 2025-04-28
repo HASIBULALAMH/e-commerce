@@ -20,11 +20,19 @@ return view('backend.features.Brand.create');
 
 
 public function store(Request $request) {
-    //dd($request->all());
-    Brand::create([
+
+        if ($request->hasFile('logo')) {
+            $file = $request->file('logo');
+            $fileName = date('YmdHis') . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('/brands', $fileName);
+        }
+
+
+        //dd($request->all());
+        Brand::create([
      "name"=>$request->name,
         "description"=>$request->description,
-        "logo"=>$request->logo,
+        "logo"=>$request->$fileName,
         "status"=>$request->status
     ]);
     return redirect()->back();

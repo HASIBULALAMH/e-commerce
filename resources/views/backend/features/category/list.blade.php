@@ -39,13 +39,12 @@
                                                 <td>{{ $cats->name }}</td>
                                                 <td>{{ $cats->description }}</td>
                                                 <td>
-                                                    <img src="{{ $cats->image ?? asset('no-image.png') }}"
-                                                        alt="Category Image" class="img-thumbnail"
+                                                    <img src="{{'/uploads/categories/'.$cats->image}}" alt="Category Image" class="img-thumbnail"
                                                         style="width: 50px; height: 50px;">
                                                 </td>
                                                 <td>{{ $cats->display_order }}</td>
                                                 <td>
-                                                    @if($cats->status == 'Active')
+                                                    @if($cats->status == 'active')
                                                     <span class="badge bg-success">Active</span>
                                                     @else
                                                     <span class="badge bg-danger">Inactive</span>

@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name', 255);
             $table->text('description');
-            $table->string('image', 255);
+            $table->string('image');
             $table->integer('display_order');
-            $table->string('status', 50)->default('active');
+            $table->string('status');
             $table->timestamps();
         });
     }

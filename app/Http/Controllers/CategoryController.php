@@ -22,11 +22,17 @@ class CategoryController extends Controller
 
 
     public function store(Request $request){
-     
-       Category::create([
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $fileName = date('YmdHis') . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('/categories', $fileName);
+        }
+
+
+        Category::create([
         "name" => $request->name,
         "description" => $request->description,
-        "image" => $request->image,
+        "image" => $fileName,
         "display_order" => $request->display_order,
         "status" => $request->status
         

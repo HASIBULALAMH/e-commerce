@@ -28,7 +28,6 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
-        $fileName = null;
             //file upload
         if($request->hasFile('image')){
             $file=$request->file('image');
@@ -40,7 +39,7 @@ class ProductController extends Controller
         Product::create([
             "name" => $request->name,
             "category_id" => $request->category_id,
-            
+            "brand_id" => $request->brand_id,
             "price" => $request->price,
             "stock" => $request->stock,
             "image" => $fileName 
