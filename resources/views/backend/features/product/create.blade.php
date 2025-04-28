@@ -1,4 +1,4 @@
-@extends('master')
+@extends('backend.master')
 @section('content')
 <div class="content-page">
     <div class="content">
@@ -10,20 +10,35 @@
                             <h4 class="mb-0">Add New Product</h4>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('product_store') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('product.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="mb-3">
                                     <label for="productName" class="form-label">Product Name</label>
                                     <input type="text" class="form-control" id="productName" name="name" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="category" class="form-label">Category</label>
-                                    <select class="form-select" id="category" name="category" required>
+                                    <label for="category" class="form-label">product Category</label>
+                                    <select name="category_id" class="form-select" aria-label="Default select example">
                                         <option value="">Select Category</option>
-                                        <option value="Electronics">Electronics</option>
-                                        <option value="Mobiles">Mobiles</option>
-                                        <option value="Fashion">Fashion</option>
+                                        @foreach($category as $categories)
+                                        <option value="{{$categories->id}}">{{$categories->name}}</option>
+                                        @endforeach
                                     </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="category" class="form-label">Brand product</label></label>
+                                    <select name="brand_id" class="form-select" aria-label="Default select example">
+                                        <option value="">Select brand</option>
+                                        @foreach($brand as $brands)
+                                        <option value="{{$brands->id}}">{{$brands->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="categoryDescription" class="form-label">Description</label>
+                                    <textarea name="description" class="form-control" id="categoryDescription" rows="3"
+                                        placeholder="Enter category description" required></textarea>
                                 </div>
                                 <div class="mb-3">
                                     <label for="price" class="form-label">Price</label>

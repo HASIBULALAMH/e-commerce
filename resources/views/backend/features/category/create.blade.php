@@ -1,4 +1,4 @@
-@extends('master')
+@extends('backend.master')
 @section('content')
 <div class="content-page">
     <div class="content">
@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-12">
-                    <a href="{{ route('category_list') }}" class="btn btn-secondary float-end">
+                    <a href="{{ route('category.list') }}" class="btn btn-secondary float-end">
                         <i class="fas fa-list"></i> View Categories
                     </a>
                 </div>
@@ -17,7 +17,7 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{ route('category_store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('category.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
                             <!-- Category Name -->
@@ -83,15 +83,15 @@
 
 <!-- Image Preview Script -->
 <script>
-document.getElementById('categoryImage').addEventListener('change', function(event) {
-    let reader = new FileReader();
-    reader.onload = function() {
-        let img = document.getElementById('imagePreview');
-        img.src = reader.result;
-        img.classList.remove('d-none');
-    };
-    reader.readAsDataURL(event.target.files[0]);
-});
+    document.getElementById('categoryImage').addEventListener('change', function(event) {
+        let reader = new FileReader();
+        reader.onload = function() {
+            let img = document.getElementById('imagePreview');
+            img.src = reader.result;
+            img.classList.remove('d-none');
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    });
 </script>
 
 @endsection

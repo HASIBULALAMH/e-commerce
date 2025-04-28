@@ -1,4 +1,4 @@
-@extends('master')
+@extends('backend.master')
 @section('content')
     
  <div class="content-page">
@@ -539,7 +539,7 @@
             <!-- content -->
 
             <!-- Footer Start -->
-            @include('fixed.footer')
+            @include('backend.fixed.footer')
             <!-- end Footer -->
 
         </div>

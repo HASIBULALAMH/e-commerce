@@ -56,14 +56,14 @@
                     </li>
 
                     <li class="side-nav-item">
-                        <a href="{{route('category_list')}}" class="side-nav-link">
+                        <a href="{{route('category.list')}}" class="side-nav-link">
                             <i class="uil-calender"></i>
                             <span> Category </span>
                         </a>
                     </li>
 
                     <li class="side-nav-item">
-                        <a href="{{route('product_list')}}" class="side-nav-link">
+                        <a href="{{route('product.list')}}" class="side-nav-link">
                             <i class="uil-calender"></i>
                             <span> product </span>
                         </a>
@@ -71,7 +71,7 @@
 
 
                     <li class="side-nav-item">
-                        <a href="{{route('brand_list')}}" class="side-nav-link">
+                        <a href="{{route('brand.list')}}" class="side-nav-link">
                             <i class="uil-calender"></i>
                             <span> Brand</span>
                         </a>

@@ -1,4 +1,4 @@
-@extends('master')
+@extends('backend.master')
 @section('content')
 <div class="content-page">
     <div class="content">
@@ -7,7 +7,7 @@
             <!-- Back to Brand List Button -->
             <div class="row mb-2">
                 <div class="col-12">
-                    <a href="{{ route('brand_list') }}" class="btn btn-secondary float-end">
+                    <a href="{{ route('brand.list') }}" class="btn btn-secondary float-end">
                         <i class="fas fa-arrow-left"></i> Back to Brand List
                     </a>
                 </div>
@@ -16,7 +16,7 @@
             <!-- Brand Create Form -->
             <div class="container mt-5">
                 <h2>Create New Brand</h2>
-                <form action="{{route('brand_store')}}" method="POST" enctype="multipart/form-data">
+                <form action="{{route('brand.store')}}" method="POST" enctype="multipart/form-data">
 
                     @csrf
                     <!-- Brand Name -->

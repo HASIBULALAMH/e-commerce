@@ -10,12 +10,12 @@ class BrandController extends Controller
 {
     public function list() {
         $brand=Brand::all();
-        return view('features.Brand.list',compact('brand'));
+        return view('backend.features.Brand.list',compact('brand'));
     }
 
 
 public function create(){
-return view('features.Brand.create');
+return view('backend.features.Brand.create');
 }
 
 

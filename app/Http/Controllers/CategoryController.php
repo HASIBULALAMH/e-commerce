@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -11,12 +11,12 @@ class CategoryController extends Controller
     public function list(){
 
         $cat=Category::all();
-        return view('features.category.list',compact('cat'));
+        return view('backend.features.category.list',compact('cat'));
     }
 
 
     public function create(){
-        return view('features.category.create');
+        return view('backend.features.category.create');
        
     } 
 
@@ -32,7 +32,7 @@ class CategoryController extends Controller
         
 ]);
         
-        return redirect()->back();
+        return redirect()->route('category.list');
 
 }
 

@@ -1,4 +1,4 @@
-@extends('master')
+@extends('backend.master')
 @section('content')
 <div class="content-page">
     <div class="content">
@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-12">
-                    <a href="{{route('product_create')}}" class="btn btn-primary float-end">
+                    <a href="{{route('product.create')}}" class="btn btn-primary float-end">
                         <i class="fas fa-plus"></i> Add New Category
                     </a>
                 </div>
@@ -25,10 +25,14 @@
                             <th onclick="sortTable(2)" style="cursor: pointer; padding: 10px; border: 1px solid #ddd;">
                                 Category 🔽</th>
                             <th onclick="sortTable(3)" style="cursor: pointer; padding: 10px; border: 1px solid #ddd;">
+                                brand 🔽</th>
+                            <th onclick="sortTable(4)" style="cursor: pointer; padding: 10px; border: 1px solid #ddd;">
+                                description 🔽</th>
+                            <th onclick="sortTable(5)" style="cursor: pointer; padding: 10px; border: 1px solid #ddd;">
                                 Price 🔽</th>
-                            <th onclick="sortTable(4)" style="cursor: pointer; padding: 10px; border: 1px solid #ddd;">
+                            <th onclick="sortTable(6)" style="cursor: pointer; padding: 10px; border: 1px solid #ddd;">
                                 Stock 🔽</th>
-                            <th onclick="sortTable(4)" style="cursor: pointer; padding: 10px; border: 1px solid #ddd;">
+                            <th onclick="sortTable(7)" style="cursor: pointer; padding: 10px; border: 1px solid #ddd;">
                                 image 🔽</th>
                             <th style="padding: 10px; border: 1px solid #ddd;">Actions</th>
                         </tr>
@@ -38,20 +42,24 @@
                         <tr>
                             <td style="padding: 10px; border: 1px solid #ddd;">{{$products->id}}</td>
                             <td style="padding: 10px; border: 1px solid #ddd;">{{$products->name}}</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">{{$products->category}}</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">{{$products->category->name}}</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">{{$products->brand->name}}</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">{{$products->description}}</td>
                             <td style="padding: 10px; border: 1px solid #ddd;">{{ $products->price }}</td>
                             <td style="padding: 10px; border: 1px solid #ddd;">{{$products->stock}}</td>
                             <td style="padding: 10px; border: 1px solid #ddd;">{{$products->image}}</td>
 
                             <td style="padding: 10px; border: 1px solid #ddd;">
-                                <a href="#" class="btn btn-warning">edit</a>
-                                <a href="{{route('product_delete',$products->id)}}" class="btn btn-danger">delete</a>
+                                <a href="{{route('product.view',$products->id)}}" class="btn btn-primary">view</a>
+                                <a href="" class="btn btn-warning">edit</a>
+                                <a href="{{route('product.delete',$products->id)}}" class="btn btn-danger">delete</a>
                             </td>
                         </tr>
 
                         @endforeach
                     </tbody>
                 </table>
+                {{$product->links()}}
             </div>
         </div>
     </div>

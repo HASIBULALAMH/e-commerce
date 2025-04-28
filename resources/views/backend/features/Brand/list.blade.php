@@ -1,4 +1,4 @@
-@extends('master')
+@extends('backend.master')
 @section('content')
 <div class="content-page">
     <div class="content">
@@ -7,7 +7,7 @@
             <!-- Add New Brand Button -->
             <div class="row mb-2">
                 <div class="col-12">
-                    <a href="{{ route('brand_create') }}" class="btn btn-primary float-end">
+                    <a href="{{ route('brand.create') }}" class="btn btn-primary float-end">
                         <i class="fas fa-plus"></i> Add New Brand
                     </a>
                 </div>

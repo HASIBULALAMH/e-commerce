@@ -1,4 +1,4 @@
-@extends('master')
+@extends('backend.master')
 @section('content')
 <div class="content-page">
     <div class="content">
@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-12">
-                    <a href="{{ url('/category_create') }}" class="btn btn-primary float-end">
+                    <a href="{{ route('category.create') }}" class="btn btn-primary float-end">
                         <i class="fas fa-plus"></i> Add New Category
                     </a>
                 </div>
@@ -56,7 +56,7 @@
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
                                                     <a class="btn btn-danger btn-sm"
-                                                        href="{{ route('category_delete', $cats->id) }}">
+                                                        href="{{ route('category.delete', $cats->id) }}">
                                                         <i class="fas fa-trash"></i> Delete
                                                     </a>
                                                 </td>
