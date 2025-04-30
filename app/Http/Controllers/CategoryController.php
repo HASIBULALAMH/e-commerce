@@ -36,7 +36,7 @@ class CategoryController extends Controller
         "display_order" => $request->display_order,
         "status" => $request->status
         
-]);
+                            ]);
         
         return redirect()->route('category.list');
 

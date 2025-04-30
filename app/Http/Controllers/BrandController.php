@@ -32,7 +32,7 @@ public function store(Request $request) {
         Brand::create([
      "name"=>$request->name,
         "description"=>$request->description,
-        "logo"=>$request->$fileName,
+        "logo"=>$fileName,
         "status"=>$request->status
     ]);
     return redirect()->back();

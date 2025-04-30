@@ -52,6 +52,26 @@
                                     <label for="productImage" class="form-label">Product Image</label>
                                     <input type="file" class="form-control" id="productImage" name="image" required>
                                 </div>
+
+                                <!-- Status -->
+                                <div class="mb-3">
+                                    <label class="form-label">Status</label>
+                                    <div class="form-check">
+                                        <input name="status" class="form-check-input" type="radio" id="statusActive"
+                                            value="active" checked />
+                                        <label class="form-check-label" for="statusActive">
+                                            Active
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input name="status" class="form-check-input" type="radio" id="statusInactive"
+                                            value="inactive" />
+                                        <label class="form-check-label" for="statusInactive">
+                                            Inactive
+                                        </label>
+                                    </div>
+                                </div>
+
                                 <div class="mb-3">
                                     <button type="submit" class="btn btn-success">Add Product</button>
                                 </div>

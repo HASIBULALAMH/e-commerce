@@ -24,6 +24,7 @@ class UserTableSeeder extends Seeder
                 'password' => bcrypt('123456'),
                 
             ]);
+            
         }
     }
 }

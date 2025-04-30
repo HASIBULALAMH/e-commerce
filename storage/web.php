@@ -4,7 +4,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\frontend\CustomerController;
 use App\Http\Controllers\frontend\HomeController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
@@ -12,16 +11,12 @@ use Illuminate\Support\Facades\Route;
 
 // frontend Routes
 Route::get('/',[HomeController::class,'index'])->name('Home');
-Route::get('/customer/register',[CustomerController::class,'register'])->name('customer.register');
-Route::post('/customer/store',[CustomerController::class,'store'])->name('customer.store');
-Route::get('/customer/login',[CustomerController::class,'login'])->name('customer.login');
 
 
 
 
 
-
-
+//Backend Routes
 //Routes group for admin panel
 Route::group(['prefix' => 'admin'], function () {
 

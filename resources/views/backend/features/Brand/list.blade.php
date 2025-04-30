@@ -39,7 +39,7 @@
                                             <td>{{ $brands->name }}</td>
                                             <td>{{ $brands->description }}</td>
                                             <td>
-                                                <img src="{{ $brands->logo }}" alt="Brand Logo"
+                                                <img src="{{ '/uploads/brands/'.$brands->logo }}" alt="Brand Logo"
                                                     style="width: 50px; height: 50px; border-radius: 5px;">
                                             </td>
                                             <td>
