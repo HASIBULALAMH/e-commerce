@@ -50,7 +50,7 @@
                                     </tr> -->
                                     <tr>
                                         <th>Category</th>
-                                        <td>{{  $product->category->name  }}</td>
+                                        <td>{{ $product->category->name  }}</td>
                                     </tr>
                                     <tr>
                                         <th>Price</th>
@@ -88,7 +88,7 @@
                         </div>
                     </div>
                 </div>
-              
+
             </div>
         </div>
     </div>

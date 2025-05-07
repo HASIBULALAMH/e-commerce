@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -15,6 +16,16 @@ class AuthController extends Controller
 
     public function loginsubmit(Request $request)
     {
+        //validation
+        $validator=Validator::make($request->all(), [
+            'email' => 'required|email',
+             ]);
+        if ($validator->fails()) {
+            notify()->error($validator->getMessageBag());
+            return redirect()->back();
+        }
+
+        
         // dd($request->all());
         $credentials = $request->except('_token');
         

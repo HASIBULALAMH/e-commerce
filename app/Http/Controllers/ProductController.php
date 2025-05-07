@@ -28,6 +28,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
+
             //file upload
         if($request->hasFile('image')){
             $file=$request->file('image');
@@ -68,3 +69,5 @@ class ProductController extends Controller
     }
 
 }
+
+

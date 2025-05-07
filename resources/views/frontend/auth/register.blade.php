@@ -252,11 +252,11 @@
                 @csrf
                 <h3>Login</h3>
                 <div class="mail">
-                    <input type="email" name="email">
+                    <input type="email" name="email" required>
                     <label>E-Mail or Username</label>
                 </div>
                 <div class="passwd">
-                    <input type="password" name="password">
+                    <input type="password" name="password" required>
                     <label>Password</label>
                 </div>
                 <div class="submit">
@@ -270,23 +270,23 @@
                 @csrf
                 <h3>Register</h3>
                 <div class="name">
-                    <input type="text" name="name">
+                    <input type="text" name="name" required>
                     <label>Full Name</label>
                 </div>
                 <div class="mail">
-                    <input type="email" name="email">
+                    <input type="email" name="email" required>
                     <label>E-Mail</label>
                 </div>
                 <div class="uid">
-                    <input type="number" name="phone">
+                    <input type="number" name="phone" required>
                     <label>phone </label>
                 </div>
                 <div class="passwd">
-                    <input type="password" name="password">
+                    <input type="password" name="password" required>
                     <label>Password</label>
                 </div>
                 <div class="passwd">
-                    <input type="password" name="password">
+                    <input type="password" name="password" required>
                     <label>confram Password</label>
                 </div>
                 <div class="submit">

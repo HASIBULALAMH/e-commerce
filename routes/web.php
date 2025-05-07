@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\frontend\BrandController as FrontendBrandController;
 use App\Http\Controllers\frontend\CustomerController;
 use App\Http\Controllers\frontend\HomeController;
 use App\Http\Controllers\ProductController;
@@ -11,10 +12,20 @@ use Illuminate\Support\Facades\Route;
 
 
 // frontend Routes
-Route::get('/',[HomeController::class,'index'])->name('Home');
-Route::get('/customer/register',[CustomerController::class,'register'])->name('customer.register');
-Route::post('/customer/store',[CustomerController::class,'store'])->name('customer.store');
-Route::get('/customer/login',[CustomerController::class,'login'])->name('customer.login');
+Route::get('/', [HomeController::class, 'index'])->name('Home');
+
+//Customer auth
+Route::get('/customer/register', [CustomerController::class, 'register'])->name('customer.register');
+Route::post('/customer/store', [CustomerController::class, 'store'])->name('customer.store');
+Route::get('/customer/login', [CustomerController::class, 'login'])->name('customer.login');
+
+//frontend pages
+Route::get('/Brand',[FrontendBrandController::class,'brand'])->name('customer.brand');
+Route::get('/Brand/Items/{id}',[FrontendBrandController::class,'brands'])->name('customer.brands');
+
+
+//customer profile
+Route::get('/customer/profile/{id}',[CustomerController::class,'profile'])->name('customer.profile');
 
 
 
