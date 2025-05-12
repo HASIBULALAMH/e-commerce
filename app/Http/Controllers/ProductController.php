@@ -7,6 +7,8 @@ use App\Models\Brand;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Support\Facades\Validator;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class ProductController extends Controller
 {
@@ -28,6 +30,20 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
+        //product form validation
+        $validation = Validator::make($request->all(),[
+            'name' => 'Required|string|max:55' ,
+            
+            'description' => 'Required|string|max:555' ,
+            'price' =>'Required' ,
+            'stock' => 'Required',
+            'image' => 'Required|file|max:1024'
+        ]);
+            if($validation->fails()){
+                toastr()->title('product form')->success($validation->getMessageBag());
+                return redirect()->back();
+            }
+
 
             //file upload
         if($request->hasFile('image')){
@@ -44,6 +60,7 @@ class ProductController extends Controller
             "description" => $request->description,
             "price" => $request->price,
             "stock" => $request->stock,
+            "discount" =>$request->discount,
             "status" => $request->status,
             "image" => $fileName 
 

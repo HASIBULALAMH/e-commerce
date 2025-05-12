@@ -57,6 +57,14 @@
                                         <td>{{ number_format($product->price, 2) }}</td>
                                     </tr>
                                     <tr>
+                                        <th>discount</th>
+                                        @if($product->discount >0)
+                                        <td>{{ number_format($product->discount, 2) }} BDT</td>
+                                        @else
+                                        <td> No Discount</td>
+                                        @endif
+                                    </tr>
+                                    <tr>
                                         <th>Stock Quantity</th>
                                         <td>{{ $product->stock }}</td>
                                     </tr>

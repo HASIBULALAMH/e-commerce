@@ -45,6 +45,10 @@
                                     <input type="number" class="form-control" id="price" name="price" required>
                                 </div>
                                 <div class="mb-3">
+                                    <label for="discount" class="form-label">Discount</label>
+                                    <input type="number" class="form-control" id="discount" name="discount" required>
+                                </div>
+                                <div class="mb-3">
                                     <label for="stock" class="form-label">Stock</label>
                                     <input type="number" class="form-control" id="stock" name="stock" required>
                                 </div>

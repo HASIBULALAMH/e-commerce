@@ -7,7 +7,10 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\frontend\BrandController as FrontendBrandController;
 use App\Http\Controllers\frontend\CustomerController;
 use App\Http\Controllers\frontend\HomeController;
+use App\Http\Controllers\frontend\OrderConteoller;
+use App\Http\Controllers\frontend\ProductController as FrontendProductController;
 use App\Http\Controllers\ProductController;
+use Faker\Guesser\Name;
 use Illuminate\Support\Facades\Route;
 
 
@@ -22,6 +25,14 @@ Route::get('/customer/login', [CustomerController::class, 'login'])->name('custo
 //frontend pages
 Route::get('/Brand',[FrontendBrandController::class,'brand'])->name('customer.brand');
 Route::get('/Brand/Items/{id}',[FrontendBrandController::class,'brands'])->name('customer.brands');
+//product single page
+Route::get('/product/details/{id}',[FrontendProductController::class,'view'])->name('product.details');
+
+//product list page
+Route::get('/product/list',[FrontendProductController::class,'listview'])->name('product.listview');
+
+
+
 
 
 //customer profile

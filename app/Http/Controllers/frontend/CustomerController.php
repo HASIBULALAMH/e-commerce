@@ -27,7 +27,7 @@ class CustomerController extends Controller
             //  dd($customer->getMessageBag());
            
              if ($customer->fails()){
-             
+             dd($customer->getMessageBag());
             toastr()->error($customer->getMessageBag());
                 return redirect()->back();
             }
@@ -49,11 +49,12 @@ class CustomerController extends Controller
             'email' => 'required|email',
             'password' => 'required|string|min:8|max:16|regex:/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/'
         ]);
-        if ($customer->fails()) {
 
+         if ($customer->fails()) {
+        // dd($customer->getMessageBag());
             toastr()->error($customer->getMessageBag());
             return redirect()->back();
-        }
+     }
 
 
         $credentials = $request->except('_token');
