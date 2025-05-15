@@ -21,28 +21,28 @@ Route::get('/', [HomeController::class, 'index'])->name('Home');
 Route::get('/customer/register', [CustomerController::class, 'register'])->name('customer.register');
 Route::post('/customer/store', [CustomerController::class, 'store'])->name('customer.store');
 Route::get('/customer/login', [CustomerController::class, 'login'])->name('customer.login');
+Route::post('/customer/login/submit', [CustomerController::class, 'login'])->name('customer.login.submit');
 
 //frontend pages
-Route::get('/Brand',[FrontendBrandController::class,'brand'])->name('customer.brand');
-Route::get('/Brand/Items/{id}',[FrontendBrandController::class,'brands'])->name('customer.brands');
+Route::get('/Brand', [FrontendBrandController::class, 'brand'])->name('customer.brand');
+Route::get('/Brand/Items/{id}', [FrontendBrandController::class, 'brands'])->name('customer.brands');
 //product single page
-Route::get('/product/details/{id}',[FrontendProductController::class,'view'])->name('product.details');
+Route::get('/product/details/{id}', [FrontendProductController::class, 'view'])->name('product.details');
 
 //product list page
-Route::get('/product/list',[FrontendProductController::class,'listview'])->name('product.listview');
+Route::get('/product/list', [FrontendProductController::class, 'listview'])->name('product.listview');
 
+//addtocart
+Route::get('/addtocart/{product}', [OrderConteoller::class, 'addtocart'])->name('addto.cart');
 
-
-
-
-//customer profile
-Route::get('/customer/profile/{id}',[CustomerController::class,'profile'])->name('customer.profile');
-
-
-
-
-
-
+route::group(['middleware' => 'customerg'], function () {
+    //customer login submit
+    Route::post('/customer/logout', [CustomerController::class, 'logout'])->name('customer.logout');
+    Route::get('/cart/view', [OrderConteoller::class, 'view'])->name('cart.view');
+    Route::get('cart/checkout', [OrderConteoller::class, 'checkout'])->name('cart.checkout');
+    Route::get('/customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
+    Route::post('/placeorder/store',[OrderConteoller::class, 'storeaddorder'])->name('placeorder.store');
+});
 
 //Routes group for admin panel
 Route::group(['prefix' => 'admin'], function () {

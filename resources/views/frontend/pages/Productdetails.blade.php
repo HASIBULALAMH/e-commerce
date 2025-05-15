@@ -11,6 +11,7 @@
                         <img src="{{ ('/uploads/products/'.$product->image) }}"
                             alt="{{ $product->name }}"
                             class="img-fluid">
+
                     </div>
                 </div>
             </div>
@@ -66,7 +67,13 @@
                     </div>
 
                     <!-- Add to Cart Form -->
-                    <a> add to cart</a>
+                    <div class="product-description mb-4">
+                        <a href="{{route('addto.cart',$product->id)}}" 
+                           class="btn btn-primary px-4 py-2" 
+                           style="background-color: #007bff; color: white; text-decoration: none;">
+                            Add to Cart
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

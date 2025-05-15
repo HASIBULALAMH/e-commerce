@@ -45,7 +45,7 @@
                     </div>
                     <h3 class="text-xl font-semibold mb-2">{{ $product->name }}</h3>
                     <p class="text-blue-600 font-semibold mb-4">BDT{{ $product->price }}</p>
-                    <a href="#" class="text-blue-500 hover:underline">View Details</a>
+                    <a href="{{route('product.details',$product->id)}}" class="text-blue-500 hover:underline">View Details</a>
                 </div>
                 @endforeach
             </div>
