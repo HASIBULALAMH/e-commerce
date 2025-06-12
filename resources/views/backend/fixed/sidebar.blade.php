@@ -77,6 +77,13 @@
                         </a>
                     </li>
 
+                    <li class="side-nav-item">
+                        <a href="{{route('orders.list')}}" class="side-nav-link">
+                            <i class="uil-calender"></i>
+                            <span> order list</span>
+                        </a>
+                    </li>
+
 
 
 

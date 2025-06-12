@@ -22,13 +22,13 @@ class CustomerController extends Controller
             'name' => 'required|string|max:25',
             'email' => 'required|email',
             'phone' => 'required|numeric|min:11',
-            'password' => 'required|string|min:8|max:16|regex:/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/'
+            'password' => 'required|string'
         ]);
             //  dd($customer->getMessageBag());
            
              if ($customer->fails()){
-             dd($customer->getMessageBag());
-            toastr()->error($customer->getMessageBag());
+             //dd($customer->getMessageBag());
+             toastr()->error('invalid cradintials');
                 return redirect()->back();
             }
         
@@ -47,24 +47,24 @@ class CustomerController extends Controller
 
         $customer = Validator::make($request->all(), [
             'email' => 'required|email',
-            'password' => 'required|string|min:8|max:16|regex:/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/'
+            'password' => 'required|string'
         ]);
 
          if ($customer->fails()) {
         // dd($customer->getMessageBag());
-            toastr()->error($customer->getMessageBag());
-            return redirect()->back();
+        toastr()->error('Invalid credentials');
+        return redirect()->back();
      }
 
 
         $credentials = $request->except('_token');
         $check = auth('customerg')->attempt($credentials);
         if($check){
-            toastr()->success('successfully login');
+            toastr()->success('Successfully logged in');
             return redirect()->route('customer.profile');
         }
         else{
-            toastr()->error('invalid credentials');
+            toastr()->error('Invalid email or password');
             return redirect()->route('Home');
         }
 

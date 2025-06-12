@@ -10,6 +10,7 @@ use App\Http\Controllers\frontend\HomeController;
 use App\Http\Controllers\frontend\OrderConteoller;
 use App\Http\Controllers\frontend\ProductController as FrontendProductController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderListController;
 use Faker\Guesser\Name;
 use Illuminate\Support\Facades\Route;
 
@@ -75,5 +76,17 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/brand/list', [BrandController::class, 'list'])->name('brand.list');
         Route::get('/brand/create', [BrandController::class, 'create'])->name('brand.create');
         Route::post('/brand/store', [BrandController::class, 'store'])->name('brand.store');
+
+        // Order Management Routes
+        Route::prefix('orders')->group(function () {
+            Route::get('/list', [OrderListController::class, 'list'])->name('orders.list');
+            Route::get('/{order}', [OrderListController::class, 'show'])->name('orders.show');
+            Route::get('/{order}/status-history', [OrderListController::class, 'statusHistory'])->name('orders.status.history');
+            Route::post('/{order}/confirm', [OrderListController::class, 'confirm'])->name('orders.confirm');
+            Route::post('/{order}/cancel', [OrderListController::class, 'cancel'])->name('orders.cancel');
+            Route::post('/{order}/status', [OrderListController::class, 'updateStatus'])->name('orders.status.update');
+            Route::post('/bulk-update', [OrderListController::class, 'bulkUpdate'])->name('orders.bulk-update');
+            Route::get('/export', [OrderListController::class, 'export'])->name('orders.export');
+        });
     });
 });
