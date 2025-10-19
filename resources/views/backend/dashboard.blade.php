@@ -1,547 +1,877 @@
 @extends('backend.master')
+
+@section('title', 'Dashboard - E-Commerce Admin')
+
+@push('styles')
+    <style>
+        .stats-card {
+            transition: all 0.3s ease;
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            z-index: -1;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .stats-card:hover::before {
+            opacity: 1;
+        }
+        
+        .stats-card .card-body {
+            padding: 1.5rem;
+        }
+        
+        .stats-card .stat-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 28px;
+            margin-bottom: 1rem;
+        }
+        
+        .stats-card .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stats-card .stat-label {
+            color: var(--gray-600);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .stats-card .stat-change {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            margin-top: 0.5rem;
+        }
+        
+        .stats-card .stat-change i {
+            margin-right: 4px;
+        }
+        
+        .stats-card .stat-change.positive {
+            color: var(--success);
+        }
+        
+        .stats-card .stat-change.negative {
+            color: var(--danger);
+        }
+        
+        /* Chart Card */
+        .chart-card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .chart-card .card-header {
+            border-bottom: 1px solid var(--gray-200);
+            background: transparent;
+            padding: 1.25rem 1.5rem;
+        }
+        
+        .chart-card .card-title {
+            margin-bottom: 0;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+        
+        /* Recent Orders Table */
+        .recent-orders {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .recent-orders .table {
+            margin-bottom: 0;
+        }
+        
+        .recent-orders .table th {
+            border-top: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            color: var(--gray-600);
+            padding: 1rem 1.5rem;
+            background-color: var(--gray-50);
+        }
+        
+        .recent-orders .table td {
+            padding: 1rem 1.5rem;
+            vertical-align: middle;
+            border-color: var(--gray-100);
+        }
+        
+        .recent-orders .badge {
+            padding: 0.35em 0.65em;
+            font-weight: 500;
+        }
+    </style>
+@endpush
+
 @section('content')
-    
- <div class="content-page">
-            <div class="content">
-
-                <!-- Start Content-->
-                <div class="container-fluid">
-
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="page-title-box">
-                                <div class="page-title-right">
-                                    <form class="d-flex">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control form-control-light" id="dash-daterange">
-                                            <span class="input-group-text bg-primary border-primary text-white">
-                                                <i class="mdi mdi-calendar-range font-13"></i>
-                                            </span>
-                                        </div>
-                                        <a href="javascript: void(0);" class="btn btn-primary ms-2">
-                                            <i class="mdi mdi-autorenew"></i>
-                                        </a>
-                                        <a href="javascript: void(0);" class="btn btn-primary ms-1">
-                                            <i class="mdi mdi-filter-variant"></i>
-                                        </a>
-                                    </form>
-                                </div>
-                                <h4 class="page-title">Dashboard</h4>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-xl-5 col-lg-6">
-
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="card widget-flat">
-                                        <div class="card-body">
-                                            <div class="float-end">
-                                                <i class="mdi mdi-account-multiple widget-icon"></i>
-                                            </div>
-                                            <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Customers</h5>
-                                            <h3 class="mt-3 mb-3">36,254</h3>
-                                            <p class="mb-0 text-muted">
-                                                <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
-                                                <span class="text-nowrap">Since last month</span>
-                                            </p>
-                                        </div> <!-- end card-body-->
-                                    </div> <!-- end card-->
-                                </div> <!-- end col-->
-
-                                <div class="col-sm-6">
-                                    <div class="card widget-flat">
-                                        <div class="card-body">
-                                            <div class="float-end">
-                                                <i class="mdi mdi-cart-plus widget-icon"></i>
-                                            </div>
-                                            <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Orders</h5>
-                                            <h3 class="mt-3 mb-3">5,543</h3>
-                                            <p class="mb-0 text-muted">
-                                                <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span>
-                                                <span class="text-nowrap">Since last month</span>
-                                            </p>
-                                        </div> <!-- end card-body-->
-                                    </div> <!-- end card-->
-                                </div> <!-- end col-->
-                            </div> <!-- end row -->
-
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="card widget-flat">
-                                        <div class="card-body">
-                                            <div class="float-end">
-                                                <i class="mdi mdi-currency-usd widget-icon"></i>
-                                            </div>
-                                            <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Revenue</h5>
-                                            <h3 class="mt-3 mb-3">$6,254</h3>
-                                            <p class="mb-0 text-muted">
-                                                <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span>
-                                                <span class="text-nowrap">Since last month</span>
-                                            </p>
-                                        </div> <!-- end card-body-->
-                                    </div> <!-- end card-->
-                                </div> <!-- end col-->
-
-                                <div class="col-sm-6">
-                                    <div class="card widget-flat">
-                                        <div class="card-body">
-                                            <div class="float-end">
-                                                <i class="mdi mdi-pulse widget-icon"></i>
-                                            </div>
-                                            <h5 class="text-muted fw-normal mt-0" title="Growth">Growth</h5>
-                                            <h3 class="mt-3 mb-3">+ 30.56%</h3>
-                                            <p class="mb-0 text-muted">
-                                                <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span>
-                                                <span class="text-nowrap">Since last month</span>
-                                            </p>
-                                        </div> <!-- end card-body-->
-                                    </div> <!-- end card-->
-                                </div> <!-- end col-->
-                            </div> <!-- end row -->
-
-                        </div> <!-- end col -->
-
-                        <div class="col-xl-7 col-lg-6">
-                            <div class="card card-h-100">
-                                <div class="d-flex card-header justify-content-between align-items-center">
-                                    <h4 class="header-title">Projections Vs Actuals</h4>
-                                    <div class="dropdown">
-                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="mdi mdi-dots-vertical"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-body pt-0">
-                                    <div dir="ltr">
-                                        <div id="high-performing-product" class="apex-charts" data-colors="#727cf5,#91a6bd40"></div>
-                                    </div>
-
-                                </div> <!-- end card-body-->
-                            </div> <!-- end card-->
-
-                        </div> <!-- end col -->
-                    </div>
-                    <!-- end row -->
-
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <div class="card">
-                                <div class="d-flex card-header justify-content-between align-items-center">
-                                    <h4 class="header-title">Revenue</h4>
-                                    <div class="dropdown">
-                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="mdi mdi-dots-vertical"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-body pt-0">
-                                    <div class="chart-content-bg">
-                                        <div class="row text-center">
-                                            <div class="col-sm-6">
-                                                <p class="text-muted mb-0 mt-3">Current Week</p>
-                                                <h2 class="fw-normal mb-3">
-                                                    <small class="mdi mdi-checkbox-blank-circle text-primary align-middle me-1"></small>
-                                                    <span>$58,254</span>
-                                                </h2>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <p class="text-muted mb-0 mt-3">Previous Week</p>
-                                                <h2 class="fw-normal mb-3">
-                                                    <small class="mdi mdi-checkbox-blank-circle text-success align-middle me-1"></small>
-                                                    <span>$69,524</span>
-                                                </h2>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="dash-item-overlay d-none d-md-block" dir="ltr">
-                                        <h5>Today's Earning: $2,562.30</h5>
-                                        <p class="text-muted font-13 mb-3 mt-2">Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui.
-                                            Etiam rhoncus...</p>
-                                        <a href="javascript: void(0);" class="btn btn-outline-primary">View Statements
-                                            <i class="mdi mdi-arrow-right ms-2"></i>
-                                        </a>
-                                    </div>
-                                    <div dir="ltr">
-                                        <div id="revenue-chart" class="apex-charts mt-3" data-colors="#727cf5,#0acf97"></div>
-                                    </div>
-                                </div> <!-- end card-body-->
-                            </div> <!-- end card-->
-                        </div> <!-- end col-->
-
-                        <div class="col-lg-4">
-                            <div class="card">
-                                <div class="d-flex card-header justify-content-between align-items-center">
-                                    <h4 class="header-title">Revenue By Location</h4>
-                                    <div class="dropdown">
-                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="mdi mdi-dots-vertical"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="card-body pt-0">
-                                    <div class="mb-4 mt-3">
-                                        <div id="world-map-markers" style="height: 217px"></div>
-                                    </div>
-
-                                    <h5 class="mb-1 mt-0 fw-normal">New York</h5>
-                                    <div class="progress-w-percent">
-                                        <span class="progress-value fw-bold">72k </span>
-                                        <div class="progress progress-sm">
-                                            <div class="progress-bar" role="progressbar" style="width: 72%;" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-
-                                    <h5 class="mb-1 mt-0 fw-normal">San Francisco</h5>
-                                    <div class="progress-w-percent">
-                                        <span class="progress-value fw-bold">39k </span>
-                                        <div class="progress progress-sm">
-                                            <div class="progress-bar" role="progressbar" style="width: 39%;" aria-valuenow="39" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-
-                                    <h5 class="mb-1 mt-0 fw-normal">Sydney</h5>
-                                    <div class="progress-w-percent">
-                                        <span class="progress-value fw-bold">25k </span>
-                                        <div class="progress progress-sm">
-                                            <div class="progress-bar" role="progressbar" style="width: 39%;" aria-valuenow="39" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-
-                                    <h5 class="mb-1 mt-0 fw-normal">Singapore</h5>
-                                    <div class="progress-w-percent mb-0">
-                                        <span class="progress-value fw-bold">61k </span>
-                                        <div class="progress progress-sm">
-                                            <div class="progress-bar" role="progressbar" style="width: 61%;" aria-valuenow="61" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                </div> <!-- end card-body-->
-                            </div> <!-- end card-->
-                        </div> <!-- end col-->
-                    </div>
-                    <!-- end row -->
-
-                    <div class="row">
-                        <div class="col-xl-6 col-lg-12 order-lg-2 order-xl-1">
-                            <div class="card">
-                                <div class="d-flex card-header justify-content-between align-items-center">
-                                    <h4 class="header-title">Top Selling Products</h4>
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-light">Export <i class="mdi mdi-download ms-1"></i></a>
-                                </div>
-
-                                <div class="card-body pt-0">
-                                    <div class="table-responsive">
-                                        <table class="table table-centered table-nowrap table-hover mb-0">
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">ASOS Ridley High Waist</h5>
-                                                        <span class="text-muted font-13">07 April 2018</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">$79.49</h5>
-                                                        <span class="text-muted font-13">Price</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">82</h5>
-                                                        <span class="text-muted font-13">Quantity</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">$6,518.18</h5>
-                                                        <span class="text-muted font-13">Amount</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">Marco Lightweight Shirt</h5>
-                                                        <span class="text-muted font-13">25 March 2018</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">$128.50</h5>
-                                                        <span class="text-muted font-13">Price</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">37</h5>
-                                                        <span class="text-muted font-13">Quantity</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">$4,754.50</h5>
-                                                        <span class="text-muted font-13">Amount</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">Half Sleeve Shirt</h5>
-                                                        <span class="text-muted font-13">17 March 2018</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">$39.99</h5>
-                                                        <span class="text-muted font-13">Price</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">64</h5>
-                                                        <span class="text-muted font-13">Quantity</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">$2,559.36</h5>
-                                                        <span class="text-muted font-13">Amount</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">Lightweight Jacket</h5>
-                                                        <span class="text-muted font-13">12 March 2018</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">$20.00</h5>
-                                                        <span class="text-muted font-13">Price</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">184</h5>
-                                                        <span class="text-muted font-13">Quantity</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">$3,680.00</h5>
-                                                        <span class="text-muted font-13">Amount</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">Marco Shoes</h5>
-                                                        <span class="text-muted font-13">05 March 2018</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">$28.49</h5>
-                                                        <span class="text-muted font-13">Price</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">69</h5>
-                                                        <span class="text-muted font-13">Quantity</span>
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-14 my-1 fw-normal">$1,965.81</h5>
-                                                        <span class="text-muted font-13">Amount</span>
-                                                    </td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                                    </div> <!-- end table-responsive-->
-                                </div> <!-- end card-body-->
-                            </div> <!-- end card-->
-                        </div> <!-- end col-->
-
-                        <div class="col-xl-3 col-lg-6 order-lg-1">
-                            <div class="card">
-                                <div class="d-flex card-header justify-content-between align-items-center">
-                                    <h4 class="header-title">Total Sales</h4>
-                                    <div class="dropdown">
-                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="mdi mdi-dots-vertical"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="card-body pt-0">
-                                    <div id="average-sales" class="apex-charts mb-4 mt-2" data-colors="#727cf5,#0acf97,#fa5c7c,#ffbc00"></div>
-
-
-                                    <div class="chart-widget-list">
-                                        <p>
-                                            <i class="mdi mdi-square text-primary"></i> Direct
-                                            <span class="float-end">$300.56</span>
-                                        </p>
-                                        <p>
-                                            <i class="mdi mdi-square text-danger"></i> Affilliate
-                                            <span class="float-end">$135.18</span>
-                                        </p>
-                                        <p>
-                                            <i class="mdi mdi-square text-success"></i> Sponsored
-                                            <span class="float-end">$48.96</span>
-                                        </p>
-                                        <p class="mb-0">
-                                            <i class="mdi mdi-square text-warning"></i> E-mail
-                                            <span class="float-end">$154.02</span>
-                                        </p>
-                                    </div>
-                                </div> <!-- end card-body-->
-                            </div> <!-- end card-->
-                        </div> <!-- end col-->
-
-                        <div class="col-xl-3 col-lg-6 order-lg-1">
-                            <div class="card">
-                                <div class="d-flex card-header justify-content-between align-items-center">
-                                    <h4 class="header-title">Recent Activity</h4>
-                                    <div class="dropdown">
-                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="mdi mdi-dots-vertical"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="card-body py-0 mb-3" data-simplebar style="max-height: 403px;">
-                                    <div class="timeline-alt py-0">
-                                        <div class="timeline-item">
-                                            <i class="mdi mdi-upload bg-info-lighten text-info timeline-icon"></i>
-                                            <div class="timeline-item-info">
-                                                <a href="javascript:void(0);" class="text-info fw-bold mb-1 d-block">You sold an item</a>
-                                                <small>Paul Burgess just purchased "Hyper - Admin Dashboard"!</small>
-                                                <p class="mb-0 pb-2">
-                                                    <small class="text-muted">5 minutes ago</small>
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div class="timeline-item">
-                                            <i class="mdi mdi-airplane bg-primary-lighten text-primary timeline-icon"></i>
-                                            <div class="timeline-item-info">
-                                                <a href="javascript:void(0);" class="text-primary fw-bold mb-1 d-block">Product on the Bootstrap Market</a>
-                                                <small>Dave Gamache added
-                                                    <span class="fw-bold">Admin Dashboard</span>
-                                                </small>
-                                                <p class="mb-0 pb-2">
-                                                    <small class="text-muted">30 minutes ago</small>
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div class="timeline-item">
-                                            <i class="mdi mdi-microphone bg-info-lighten text-info timeline-icon"></i>
-                                            <div class="timeline-item-info">
-                                                <a href="javascript:void(0);" class="text-info fw-bold mb-1 d-block">Robert Delaney</a>
-                                                <small>Send you message
-                                                    <span class="fw-bold">"Are you there?"</span>
-                                                </small>
-                                                <p class="mb-0 pb-2">
-                                                    <small class="text-muted">2 hours ago</small>
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div class="timeline-item">
-                                            <i class="mdi mdi-upload bg-primary-lighten text-primary timeline-icon"></i>
-                                            <div class="timeline-item-info">
-                                                <a href="javascript:void(0);" class="text-primary fw-bold mb-1 d-block">Audrey Tobey</a>
-                                                <small>Uploaded a photo
-                                                    <span class="fw-bold">"Error.jpg"</span>
-                                                </small>
-                                                <p class="mb-0 pb-2">
-                                                    <small class="text-muted">14 hours ago</small>
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div class="timeline-item">
-                                            <i class="mdi mdi-upload bg-info-lighten text-info timeline-icon"></i>
-                                            <div class="timeline-item-info">
-                                                <a href="javascript:void(0);" class="text-info fw-bold mb-1 d-block">You sold an item</a>
-                                                <small>Paul Burgess just purchased "Hyper - Admin Dashboard"!</small>
-                                                <p class="mb-0 pb-2">
-                                                    <small class="text-muted">16 hours ago</small>
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div class="timeline-item">
-                                            <i class="mdi mdi-airplane bg-primary-lighten text-primary timeline-icon"></i>
-                                            <div class="timeline-item-info">
-                                                <a href="javascript:void(0);" class="text-primary fw-bold mb-1 d-block">Product on the Bootstrap Market</a>
-                                                <small>Dave Gamache added
-                                                    <span class="fw-bold">Admin Dashboard</span>
-                                                </small>
-                                                <p class="mb-0 pb-2">
-                                                    <small class="text-muted">22 hours ago</small>
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div class="timeline-item">
-                                            <i class="mdi mdi-microphone bg-info-lighten text-info timeline-icon"></i>
-                                            <div class="timeline-item-info">
-                                                <a href="javascript:void(0);" class="text-info fw-bold mb-1 d-block">Robert Delaney</a>
-                                                <small>Send you message
-                                                    <span class="fw-bold">"Are you there?"</span>
-                                                </small>
-                                                <p class="mb-0 pb-2">
-                                                    <small class="text-muted">2 days ago</small>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- end timeline -->
-                                </div> <!-- end simplebar -->
-                            </div>
-                            <!-- end card-->
-                        </div>
-                        <!-- end col -->
-
-                    </div>
-                    <!-- end row -->
-
+  <div class="container-lg px-4">
+          <div class="row g-4 mb-4">
+            <div class="col-sm-6 col-xl-3">
+              <div class="card text-white bg-primary">
+                <div class="card-body pb-0 d-flex justify-content-between align-items-start">
+                  <div>
+                    <div class="fs-4 fw-semibold">26K <span class="fs-6 fw-normal">(-12.4%
+                        <svg class="icon">
+                          <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-arrow-bottom"></use>
+                        </svg>)</span></div>
+                    <div>Users</div>
+                  </div>
+                  <div class="dropdown">
+                    <button class="btn btn-transparent text-white p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <svg class="icon">
+                        <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-options"></use>
+                      </svg>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
+                  </div>
                 </div>
-                <!-- container -->
-
+                <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
+                  <canvas class="chart" id="card-chart1" height="70"></canvas>
+                </div>
+              </div>
             </div>
-            <!-- content -->
-
-            <!-- Footer Start -->
-            @include('backend.fixed.footer')
-            <!-- end Footer -->
-
+            <!-- /.col-->
+            <div class="col-sm-6 col-xl-3">
+              <div class="card text-white bg-info">
+                <div class="card-body pb-0 d-flex justify-content-between align-items-start">
+                  <div>
+                    <div class="fs-4 fw-semibold">$6.200 <span class="fs-6 fw-normal">(40.9%
+                        <svg class="icon">
+                          <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-arrow-top"></use>
+                        </svg>)</span></div>
+                    <div>Income</div>
+                  </div>
+                  <div class="dropdown">
+                    <button class="btn btn-transparent text-white p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <svg class="icon">
+                        <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-options"></use>
+                      </svg>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
+                  </div>
+                </div>
+                <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
+                  <canvas class="chart" id="card-chart2" height="70"></canvas>
+                </div>
+              </div>
+            </div>
+            <!-- /.col-->
+            <div class="col-sm-6 col-xl-3">
+              <div class="card text-white bg-warning">
+                <div class="card-body pb-0 d-flex justify-content-between align-items-start">
+                  <div>
+                    <div class="fs-4 fw-semibold">2.49% <span class="fs-6 fw-normal">(84.7%
+                        <svg class="icon">
+                          <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-arrow-top"></use>
+                        </svg>)</span></div>
+                    <div>Conversion Rate</div>
+                  </div>
+                  <div class="dropdown">
+                    <button class="btn btn-transparent text-white p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <svg class="icon">
+                        <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-options"></use>
+                      </svg>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
+                  </div>
+                </div>
+                <div class="c-chart-wrapper mt-3" style="height:70px;">
+                  <canvas class="chart" id="card-chart3" height="70"></canvas>
+                </div>
+              </div>
+            </div>
+            <!-- /.col-->
+            <div class="col-sm-6 col-xl-3">
+              <div class="card text-white bg-danger">
+                <div class="card-body pb-0 d-flex justify-content-between align-items-start">
+                  <div>
+                    <div class="fs-4 fw-semibold">44K <span class="fs-6 fw-normal">(-23.6%
+                        <svg class="icon">
+                          <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-arrow-bottom"></use>
+                        </svg>)</span></div>
+                    <div>Sessions</div>
+                  </div>
+                  <div class="dropdown">
+                    <button class="btn btn-transparent text-white p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <svg class="icon">
+                        <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-options"></use>
+                      </svg>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
+                  </div>
+                </div>
+                <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
+                  <canvas class="chart" id="card-chart4" height="70"></canvas>
+                </div>
+              </div>
+            </div>
+            <!-- /.col-->
+          </div>
+          <!-- /.row-->
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h4 class="card-title mb-0">Traffic</h4>
+                  <div class="small text-body-secondary">January - July 2023</div>
+                </div>
+                <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
+                  <div class="btn-group btn-group-toggle mx-3" data-coreui-toggle="buttons">
+                    <input class="btn-check" id="option1" type="radio" name="options" autocomplete="off">
+                    <label class="btn btn-outline-secondary"> Day</label>
+                    <input class="btn-check" id="option2" type="radio" name="options" autocomplete="off" checked="">
+                    <label class="btn btn-outline-secondary active"> Month</label>
+                    <input class="btn-check" id="option3" type="radio" name="options" autocomplete="off">
+                    <label class="btn btn-outline-secondary"> Year</label>
+                  </div>
+                  <button class="btn btn-primary" type="button">
+                    <svg class="icon">
+                      <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-cloud-download"></use>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
+                <canvas class="chart" id="main-chart" height="300"></canvas>
+              </div>
+            </div>
+            <div class="card-footer">
+              <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 row-cols-xl-5 g-4 mb-2 text-center">
+                <div class="col">
+                  <div class="text-body-secondary">Visits</div>
+                  <div class="fw-semibold text-truncate">29.703 Users (40%)</div>
+                  <div class="progress progress-thin mt-2">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="text-body-secondary">Unique</div>
+                  <div class="fw-semibold text-truncate">24.093 Users (20%)</div>
+                  <div class="progress progress-thin mt-2">
+                    <div class="progress-bar bg-info" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="text-body-secondary">Pageviews</div>
+                  <div class="fw-semibold text-truncate">78.706 Views (60%)</div>
+                  <div class="progress progress-thin mt-2">
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="text-body-secondary">New Users</div>
+                  <div class="fw-semibold text-truncate">22.123 Users (80%)</div>
+                  <div class="progress progress-thin mt-2">
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+                <div class="col d-none d-xl-block">
+                  <div class="text-body-secondary">Bounce Rate</div>
+                  <div class="fw-semibold text-truncate">40.15%</div>
+                  <div class="progress progress-thin mt-2">
+                    <div class="progress-bar" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.card-->
+          <div class="row g-4 mb-4">
+            <div class="col-sm-6 col-lg-4">
+              <div class="card" style="--cui-card-cap-bg: #3b5998">
+                <div class="card-header position-relative d-flex justify-content-center align-items-center">
+                  <svg class="icon icon-3xl text-white my-4">
+                    <use xlink:href="node_modules/@coreui/icons/sprites/brand.svg#cib-facebook-f"></use>
+                  </svg>
+                  <div class="chart-wrapper position-absolute top-0 start-0 w-100 h-100">
+                    <canvas id="social-box-chart-1" height="90"></canvas>
+                  </div>
+                </div>
+                <div class="card-body row text-center">
+                  <div class="col">
+                    <div class="fs-5 fw-semibold">89k</div>
+                    <div class="text-uppercase text-body-secondary small">friends</div>
+                  </div>
+                  <div class="vr"></div>
+                  <div class="col">
+                    <div class="fs-5 fw-semibold">459</div>
+                    <div class="text-uppercase text-body-secondary small">feeds</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.col-->
+            <div class="col-sm-6 col-lg-4">
+              <div class="card" style="--cui-card-cap-bg: #00aced">
+                <div class="card-header position-relative d-flex justify-content-center align-items-center">
+                  <svg class="icon icon-3xl text-white my-4">
+                    <use xlink:href="node_modules/@coreui/icons/sprites/brand.svg#cib-twitter"></use>
+                  </svg>
+                  <div class="chart-wrapper position-absolute top-0 start-0 w-100 h-100">
+                    <canvas id="social-box-chart-2" height="90"></canvas>
+                  </div>
+                </div>
+                <div class="card-body row text-center">
+                  <div class="col">
+                    <div class="fs-5 fw-semibold">973k</div>
+                    <div class="text-uppercase text-body-secondary small">followers</div>
+                  </div>
+                  <div class="vr"></div>
+                  <div class="col">
+                    <div class="fs-5 fw-semibold">1.792</div>
+                    <div class="text-uppercase text-body-secondary small">tweets</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.col-->
+            <div class="col-sm-6 col-lg-4">
+              <div class="card" style="--cui-card-cap-bg: #4875b4">
+                <div class="card-header position-relative d-flex justify-content-center align-items-center">
+                  <svg class="icon icon-3xl text-white my-4">
+                    <use xlink:href="node_modules/@coreui/icons/sprites/brand.svg#cib-linkedin"></use>
+                  </svg>
+                  <div class="chart-wrapper position-absolute top-0 start-0 w-100 h-100">
+                    <canvas id="social-box-chart-3" height="90"></canvas>
+                  </div>
+                </div>
+                <div class="card-body row text-center">
+                  <div class="col">
+                    <div class="fs-5 fw-semibold">500+</div>
+                    <div class="text-uppercase text-body-secondary small">contacts</div>
+                  </div>
+                  <div class="vr"></div>
+                  <div class="col">
+                    <div class="fs-5 fw-semibold">292</div>
+                    <div class="text-uppercase text-body-secondary small">feeds</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.col-->
+          </div>
+          <!-- /.row-->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card mb-4">
+                <div class="card-header">Traffic &amp; Sales</div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="row">
+                        <div class="col-6">
+                          <div class="border-start border-start-4 border-start-info px-3 mb-3">
+                            <div class="small text-body-secondary text-truncate">New Clients</div>
+                            <div class="fs-5 fw-semibold">9.123</div>
+                          </div>
+                        </div>
+                        <!-- /.col-->
+                        <div class="col-6">
+                          <div class="border-start border-start-4 border-start-danger px-3 mb-3">
+                            <div class="small text-body-secondary text-truncate">Recuring Clients</div>
+                            <div class="fs-5 fw-semibold">22.643</div>
+                          </div>
+                        </div>
+                        <!-- /.col-->
+                      </div>
+                      <!-- /.row-->
+                      <hr class="mt-0">
+                      <div class="progress-group mb-4">
+                        <div class="progress-group-prepend"><span class="text-body-secondary small">Monday</span></div>
+                        <div class="progress-group-bars">
+                          <div class="progress progress-thin">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 34%" aria-valuenow="34" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                          <div class="progress progress-thin">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 78%" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="progress-group mb-4">
+                        <div class="progress-group-prepend"><span class="text-body-secondary small">Tuesday</span></div>
+                        <div class="progress-group-bars">
+                          <div class="progress progress-thin">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 56%" aria-valuenow="56" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                          <div class="progress progress-thin">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 94%" aria-valuenow="94" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="progress-group mb-4">
+                        <div class="progress-group-prepend"><span class="text-body-secondary small">Wednesday</span></div>
+                        <div class="progress-group-bars">
+                          <div class="progress progress-thin">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 12%" aria-valuenow="12" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                          <div class="progress progress-thin">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 67%" aria-valuenow="67" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="progress-group mb-4">
+                        <div class="progress-group-prepend"><span class="text-body-secondary small">Thursday</span></div>
+                        <div class="progress-group-bars">
+                          <div class="progress progress-thin">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 43%" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                          <div class="progress progress-thin">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 91%" aria-valuenow="91" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="progress-group mb-4">
+                        <div class="progress-group-prepend"><span class="text-body-secondary small">Friday</span></div>
+                        <div class="progress-group-bars">
+                          <div class="progress progress-thin">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 22%" aria-valuenow="22" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                          <div class="progress progress-thin">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 73%" aria-valuenow="73" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="progress-group mb-4">
+                        <div class="progress-group-prepend"><span class="text-body-secondary small">Saturday</span></div>
+                        <div class="progress-group-bars">
+                          <div class="progress progress-thin">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 53%" aria-valuenow="53" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                          <div class="progress progress-thin">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 82%" aria-valuenow="82" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="progress-group mb-4">
+                        <div class="progress-group-prepend"><span class="text-body-secondary small">Sunday</span></div>
+                        <div class="progress-group-bars">
+                          <div class="progress progress-thin">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 9%" aria-valuenow="9" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                          <div class="progress progress-thin">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 69%" aria-valuenow="69" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- /.col-->
+                    <div class="col-sm-6">
+                      <div class="row">
+                        <div class="col-6">
+                          <div class="border-start border-start-4 border-start-warning px-3 mb-3">
+                            <div class="small text-body-secondary text-truncate">Pageviews</div>
+                            <div class="fs-5 fw-semibold">78.623</div>
+                          </div>
+                        </div>
+                        <!-- /.col-->
+                        <div class="col-6">
+                          <div class="border-start border-start-4 border-start-success px-3 mb-3">
+                            <div class="small text-body-secondary text-truncate">Organic</div>
+                            <div class="fs-5 fw-semibold">49.123</div>
+                          </div>
+                        </div>
+                        <!-- /.col-->
+                      </div>
+                      <!-- /.row-->
+                      <hr class="mt-0">
+                      <div class="progress-group">
+                        <div class="progress-group-header">
+                          <svg class="icon icon-lg me-2">
+                            <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-user"></use>
+                          </svg>
+                          <div>Male</div>
+                          <div class="ms-auto fw-semibold">43%</div>
+                        </div>
+                        <div class="progress-group-bars">
+                          <div class="progress progress-thin">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 43%" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="progress-group mb-5">
+                        <div class="progress-group-header">
+                          <svg class="icon icon-lg me-2">
+                            <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-user-female"></use>
+                          </svg>
+                          <div>Female</div>
+                          <div class="ms-auto fw-semibold">37%</div>
+                        </div>
+                        <div class="progress-group-bars">
+                          <div class="progress progress-thin">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 43%" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="progress-group">
+                        <div class="progress-group-header">
+                          <svg class="icon icon-lg me-2">
+                            <use xlink:href="node_modules/@coreui/icons/sprites/brand.svg#cib-google"></use>
+                          </svg>
+                          <div>Organic Search</div>
+                          <div class="ms-auto fw-semibold me-2">191.235</div>
+                          <div class="text-body-secondary small">(56%)</div>
+                        </div>
+                        <div class="progress-group-bars">
+                          <div class="progress progress-thin">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 56%" aria-valuenow="56" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="progress-group">
+                        <div class="progress-group-header">
+                          <svg class="icon icon-lg me-2">
+                            <use xlink:href="node_modules/@coreui/icons/sprites/brand.svg#cib-facebook-f"></use>
+                          </svg>
+                          <div>Facebook</div>
+                          <div class="ms-auto fw-semibold me-2">51.223</div>
+                          <div class="text-body-secondary small">(15%)</div>
+                        </div>
+                        <div class="progress-group-bars">
+                          <div class="progress progress-thin">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="progress-group">
+                        <div class="progress-group-header">
+                          <svg class="icon icon-lg me-2">
+                            <use xlink:href="node_modules/@coreui/icons/sprites/brand.svg#cib-twitter"></use>
+                          </svg>
+                          <div>Twitter</div>
+                          <div class="ms-auto fw-semibold me-2">37.564</div>
+                          <div class="text-body-secondary small">(11%)</div>
+                        </div>
+                        <div class="progress-group-bars">
+                          <div class="progress progress-thin">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 11%" aria-valuenow="11" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="progress-group">
+                        <div class="progress-group-header">
+                          <svg class="icon icon-lg me-2">
+                            <use xlink:href="node_modules/@coreui/icons/sprites/brand.svg#cib-linkedin"></use>
+                          </svg>
+                          <div>LinkedIn</div>
+                          <div class="ms-auto fw-semibold me-2">27.319</div>
+                          <div class="text-body-secondary small">(8%)</div>
+                        </div>
+                        <div class="progress-group-bars">
+                          <div class="progress progress-thin">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 8%" aria-valuenow="8" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- /.col-->
+                  </div>
+                  <!-- /.row--><br>
+                  <div class="table-responsive">
+                    <table class="table border mb-0">
+                      <thead class="fw-semibold text-nowrap">
+                        <tr class="align-middle">
+                          <th class="bg-body-secondary text-center">
+                            <svg class="icon">
+                              <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-people"></use>
+                            </svg>
+                          </th>
+                          <th class="bg-body-secondary">User</th>
+                          <th class="bg-body-secondary text-center">Country</th>
+                          <th class="bg-body-secondary">Usage</th>
+                          <th class="bg-body-secondary text-center">Payment Method</th>
+                          <th class="bg-body-secondary">Activity</th>
+                          <th class="bg-body-secondary"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="align-middle">
+                          <td class="text-center">
+                            <div class="avatar avatar-md"><img class="avatar-img" src="assets/img/avatars/1.jpg" alt="user@email.com"><span class="avatar-status bg-success"></span></div>
+                          </td>
+                          <td>
+                            <div class="text-nowrap">Yiorgos Avraamu</div>
+                            <div class="small text-body-secondary text-nowrap"><span>New</span> | Registered: Jan 1, 2023</div>
+                          </td>
+                          <td class="text-center">
+                            <svg class="icon icon-xl">
+                              <use xlink:href="node_modules/@coreui/icons/sprites/flag.svg#cif-us"></use>
+                            </svg>
+                          </td>
+                          <td>
+                            <div class="d-flex justify-content-between align-items-baseline">
+                              <div class="fw-semibold">50%</div>
+                              <div class="text-nowrap small text-body-secondary ms-3">Jun 11, 2023 - Jul 10, 2023</div>
+                            </div>
+                            <div class="progress progress-thin">
+                              <div class="progress-bar bg-success" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <svg class="icon icon-xl">
+                              <use xlink:href="node_modules/@coreui/icons/sprites/brand.svg#cib-cc-mastercard"></use>
+                            </svg>
+                          </td>
+                          <td>
+                            <div class="small text-body-secondary">Last login</div>
+                            <div class="fw-semibold text-nowrap">10 sec ago</div>
+                          </td>
+                          <td>
+                            <div class="dropdown">
+                              <button class="btn btn-transparent p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <svg class="icon">
+                                  <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-options"></use>
+                                </svg>
+                              </button>
+                              <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Info</a><a class="dropdown-item" href="#">Edit</a><a class="dropdown-item text-danger" href="#">Delete</a></div>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr class="align-middle">
+                          <td class="text-center">
+                            <div class="avatar avatar-md"><img class="avatar-img" src="assets/img/avatars/2.jpg" alt="user@email.com"><span class="avatar-status bg-danger"></span></div>
+                          </td>
+                          <td>
+                            <div class="text-nowrap">Avram Tarasios</div>
+                            <div class="small text-body-secondary text-nowrap"><span>Recurring</span> | Registered: Jan 1, 2023</div>
+                          </td>
+                          <td class="text-center">
+                            <svg class="icon icon-xl">
+                              <use xlink:href="node_modules/@coreui/icons/sprites/flag.svg#cif-br"></use>
+                            </svg>
+                          </td>
+                          <td>
+                            <div class="d-flex justify-content-between align-items-baseline">
+                              <div class="fw-semibold">10%</div>
+                              <div class="text-nowrap small text-body-secondary ms-3">Jun 11, 2023 - Jul 10, 2023</div>
+                            </div>
+                            <div class="progress progress-thin">
+                              <div class="progress-bar bg-info" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <svg class="icon icon-xl">
+                              <use xlink:href="node_modules/@coreui/icons/sprites/brand.svg#cib-cc-visa"></use>
+                            </svg>
+                          </td>
+                          <td>
+                            <div class="small text-body-secondary">Last login</div>
+                            <div class="fw-semibold text-nowrap">5 minutes ago</div>
+                          </td>
+                          <td>
+                            <div class="dropdown">
+                              <button class="btn btn-transparent p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <svg class="icon">
+                                  <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-options"></use>
+                                </svg>
+                              </button>
+                              <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Info</a><a class="dropdown-item" href="#">Edit</a><a class="dropdown-item text-danger" href="#">Delete</a></div>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr class="align-middle">
+                          <td class="text-center">
+                            <div class="avatar avatar-md"><img class="avatar-img" src="assets/img/avatars/3.jpg" alt="user@email.com"><span class="avatar-status bg-warning"></span></div>
+                          </td>
+                          <td>
+                            <div class="text-nowrap">Quintin Ed</div>
+                            <div class="small text-body-secondary text-nowrap"><span>New</span> | Registered: Jan 1, 2023</div>
+                          </td>
+                          <td class="text-center">
+                            <svg class="icon icon-xl">
+                              <use xlink:href="node_modules/@coreui/icons/sprites/flag.svg#cif-in"></use>
+                            </svg>
+                          </td>
+                          <td>
+                            <div class="d-flex justify-content-between align-items-baseline">
+                              <div class="fw-semibold">74%</div>
+                              <div class="text-nowrap small text-body-secondary ms-3">Jun 11, 2023 - Jul 10, 2023</div>
+                            </div>
+                            <div class="progress progress-thin">
+                              <div class="progress-bar bg-warning" role="progressbar" style="width: 74%" aria-valuenow="74" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <svg class="icon icon-xl">
+                              <use xlink:href="node_modules/@coreui/icons/sprites/brand.svg#cib-cc-stripe"></use>
+                            </svg>
+                          </td>
+                          <td>
+                            <div class="small text-body-secondary">Last login</div>
+                            <div class="fw-semibold text-nowrap">1 hour ago</div>
+                          </td>
+                          <td>
+                            <div class="dropdown">
+                              <button class="btn btn-transparent p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <svg class="icon">
+                                  <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-options"></use>
+                                </svg>
+                              </button>
+                              <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Info</a><a class="dropdown-item" href="#">Edit</a><a class="dropdown-item text-danger" href="#">Delete</a></div>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr class="align-middle">
+                          <td class="text-center">
+                            <div class="avatar avatar-md"><img class="avatar-img" src="assets/img/avatars/4.jpg" alt="user@email.com"><span class="avatar-status bg-secondary"></span></div>
+                          </td>
+                          <td>
+                            <div class="text-nowrap">Enéas Kwadwo</div>
+                            <div class="small text-body-secondary text-nowrap"><span>New</span> | Registered: Jan 1, 2023</div>
+                          </td>
+                          <td class="text-center">
+                            <svg class="icon icon-xl">
+                              <use xlink:href="node_modules/@coreui/icons/sprites/flag.svg#cif-fr"></use>
+                            </svg>
+                          </td>
+                          <td>
+                            <div class="d-flex justify-content-between align-items-baseline">
+                              <div class="fw-semibold">98%</div>
+                              <div class="text-nowrap small text-body-secondary ms-3">Jun 11, 2023 - Jul 10, 2023</div>
+                            </div>
+                            <div class="progress progress-thin">
+                              <div class="progress-bar bg-danger" role="progressbar" style="width: 98%" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <svg class="icon icon-xl">
+                              <use xlink:href="node_modules/@coreui/icons/sprites/brand.svg#cib-cc-paypal"></use>
+                            </svg>
+                          </td>
+                          <td>
+                            <div class="small text-body-secondary">Last login</div>
+                            <div class="fw-semibold text-nowrap">Last month</div>
+                          </td>
+                          <td>
+                            <div class="dropdown">
+                              <button class="btn btn-transparent p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <svg class="icon">
+                                  <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-options"></use>
+                                </svg>
+                              </button>
+                              <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Info</a><a class="dropdown-item" href="#">Edit</a><a class="dropdown-item text-danger" href="#">Delete</a></div>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr class="align-middle">
+                          <td class="text-center">
+                            <div class="avatar avatar-md"><img class="avatar-img" src="assets/img/avatars/5.jpg" alt="user@email.com"><span class="avatar-status bg-success"></span></div>
+                          </td>
+                          <td>
+                            <div class="text-nowrap">Agapetus Tadeáš</div>
+                            <div class="small text-body-secondary text-nowrap"><span>New</span> | Registered: Jan 1, 2023</div>
+                          </td>
+                          <td class="text-center">
+                            <svg class="icon icon-xl">
+                              <use xlink:href="node_modules/@coreui/icons/sprites/flag.svg#cif-es"></use>
+                            </svg>
+                          </td>
+                          <td>
+                            <div class="d-flex justify-content-between align-items-baseline">
+                              <div class="fw-semibold">22%</div>
+                              <div class="text-nowrap small text-body-secondary ms-3">Jun 11, 2023 - Jul 10, 2023</div>
+                            </div>
+                            <div class="progress progress-thin">
+                              <div class="progress-bar bg-info" role="progressbar" style="width: 22%" aria-valuenow="22" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <svg class="icon icon-xl">
+                              <use xlink:href="node_modules/@coreui/icons/sprites/brand.svg#cib-cc-apple-pay"></use>
+                            </svg>
+                          </td>
+                          <td>
+                            <div class="small text-body-secondary">Last login</div>
+                            <div class="fw-semibold text-nowrap">Last week</div>
+                          </td>
+                          <td>
+                            <div class="dropdown dropup">
+                              <button class="btn btn-transparent p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <svg class="icon">
+                                  <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-options"></use>
+                                </svg>
+                              </button>
+                              <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Info</a><a class="dropdown-item" href="#">Edit</a><a class="dropdown-item text-danger" href="#">Delete</a></div>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr class="align-middle">
+                          <td class="text-center">
+                            <div class="avatar avatar-md"><img class="avatar-img" src="assets/img/avatars/6.jpg" alt="user@email.com"><span class="avatar-status bg-danger"></span></div>
+                          </td>
+                          <td>
+                            <div class="text-nowrap">Friderik Dávid</div>
+                            <div class="small text-body-secondary text-nowrap"><span>New</span> | Registered: Jan 1, 2023</div>
+                          </td>
+                          <td class="text-center">
+                            <svg class="icon icon-xl">
+                              <use xlink:href="node_modules/@coreui/icons/sprites/flag.svg#cif-pl"></use>
+                            </svg>
+                          </td>
+                          <td>
+                            <div class="d-flex justify-content-between align-items-baseline">
+                              <div class="fw-semibold">43%</div>
+                              <div class="text-nowrap small text-body-secondary ms-3">Jun 11, 2023 - Jul 10, 2023</div>
+                            </div>
+                            <div class="progress progress-thin">
+                              <div class="progress-bar bg-success" role="progressbar" style="width: 43%" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <svg class="icon icon-xl">
+                              <use xlink:href="node_modules/@coreui/icons/sprites/brand.svg#cib-cc-amex"></use>
+                            </svg>
+                          </td>
+                          <td>
+                            <div class="small text-body-secondary">Last login</div>
+                            <div class="fw-semibold text-nowrap">Yesterday</div>
+                          </td>
+                          <td>
+                            <div class="dropdown dropup">
+                              <button class="btn btn-transparent p-0" type="button" data-coreui-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <svg class="icon">
+                                  <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-options"></use>
+                                </svg>
+                              </button>
+                              <div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" href="#">Info</a><a class="dropdown-item" href="#">Edit</a><a class="dropdown-item text-danger" href="#">Delete</a></div>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.col-->
+          </div>
+          <!-- /.row-->
         </div>
-
 @endsection

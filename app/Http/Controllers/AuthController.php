@@ -32,7 +32,7 @@ class AuthController extends Controller
         $check = Auth::attempt($credentials);
         if ($check) {
             notify()->success('successfully login');
-            return redirect()->route('deshboard');
+            return redirect()->route('dashboard');
         } else {
             notify()->error('invalid credentials');
             return redirect()->back();

@@ -1,104 +1,42 @@
-        <div class="leftside-menu">
-
-            <!-- Brand Logo Light -->
-            <a href="index.html" class="logo logo-light">
-                <span class="logo-lg">
-                    <img src="assets/images/logo.png" alt="logo">
-                </span>
-                <span class="logo-sm">
-                    <img src="assets/images/logo-sm.png" alt="small logo">
-                </span>
-            </a>
-
-            <!-- Brand Logo Dark -->
-            <a href="index.html" class="logo logo-dark">
-                <span class="logo-lg">
-                    <img src="assets/images/logo-dark.png" alt="dark logo">
-                </span>
-                <span class="logo-sm">
-                    <img src="assets/images/logo-dark-sm.png" alt="small logo">
-                </span>
-            </a>
-
-            <!-- Sidebar Hover Menu Toggle Button -->
-            <div class="button-sm-hover" data-bs-toggle="tooltip" data-bs-placement="right" title="Show Full Sidebar">
-                <i class="ri-checkbox-blank-circle-line align-middle"></i>
-            </div>
-
-            <!-- Full Sidebar Menu Close Button -->
-            <div class="button-close-fullsidebar">
-                <i class="ri-close-fill align-middle"></i>
-            </div>
-
-            <!-- Sidebar -->
-            <div class="h-100" id="leftside-menu-container" data-simplebar>
-                <!-- Leftbar User -->
-                <div class="leftbar-user">
-                    <a href="pages-profile.html">
-                        <img src="assets/images/users/avatar-1.jpg" alt="user-image" height="42"
-                            class="rounded-circle shadow-sm">
-                        <span class="leftbar-user-name mt-2">Dominic Keller</span>
-                    </a>
-                </div>
-
-                <!--- Sidemenu -->
-                <ul class="side-nav">
-
-                    <li class="side-nav-title">Navigation</li>
-
-                    <li class="side-nav-item">
-                        <a href="{{route('deshboard')}}" class="side-nav-link">
-                            <i class="uil-home-alt"></i>
-                            <span class="badge bg-success float-end">5</span>
-                            <span> Dashboards </span>
-                        </a>
-
-                    </li>
-
-                    <li class="side-nav-item">
-                        <a href="{{route('category.list')}}" class="side-nav-link">
-                            <i class="uil-calender"></i>
-                            <span> Category </span>
-                        </a>
-                    </li>
-
-                    <li class="side-nav-item">
-                        <a href="{{route('product.list')}}" class="side-nav-link">
-                            <i class="uil-calender"></i>
-                            <span> product </span>
-                        </a>
-                    </li>
-
-
-                    <li class="side-nav-item">
-                        <a href="{{route('brand.list')}}" class="side-nav-link">
-                            <i class="uil-calender"></i>
-                            <span> Brand</span>
-                        </a>
-                    </li>
-
-                    <li class="side-nav-item">
-                        <a href="{{route('orders.list')}}" class="side-nav-link">
-                            <i class="uil-calender"></i>
-                            <span> order list</span>
-                        </a>
-                    </li>
-
-
-
-
-
-
-
-
-
-
-
-
-
-                </ul>
-                <!--- End Sidemenu -->
-
-                <div class="clearfix"></div>
-            </div>
+  <div class="sidebar sidebar-dark sidebar-fixed border-end" id="sidebar">
+      <div class="sidebar-header border-bottom">
+        <div class="sidebar-brand">
+          <svg class="sidebar-brand-full" width="88" height="32" alt="CoreUI Logo">
+            <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-speedometer"></use>
+          </svg>
+          <svg class="sidebar-brand-narrow" width="32" height="32" alt="CoreUI Logo">
+            <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-speedometer"></use>
+          </svg>
         </div>
+        <button class="btn-close d-lg-none" type="button" data-coreui-theme="dark" aria-label="Close" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()"></button>
+      </div>
+      <ul class="sidebar-nav" data-coreui="navigation" data-simplebar>
+        <li class="nav-item"><a class="nav-link" href="{{route('dashboard')}}">
+            <svg class="nav-icon">
+              <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-speedometer"></use>
+            </svg> Dashboard<span class="badge badge-sm bg-info ms-auto">NEW</span></a></li>
+        
+        <li class="nav-item"><a class="nav-link" href="{{route('category.list')}}">
+            <svg class="nav-icon">
+              <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-drop"></use>
+            </svg> Category</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{route('brand.list')}}">
+            <svg class="nav-icon">
+              <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-pencil"></use>
+            </svg> Brand</a></li>
+
+            <li class="nav-item"><a class="nav-link" href="{{route('product.list')}}">
+            <svg class="nav-icon">
+              <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-pencil"></use>
+            </svg> product</a></li>
+
+            <li class="nav-item"><a class="nav-link" href="{{route('order.list')}}">
+            <svg class="nav-icon">
+              <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-pencil"></use>
+            </svg> order</a></li>
+           
+        </ul>
+      <div class="sidebar-footer border-top d-none d-md-flex">     
+        <button class="sidebar-toggler" type="button" data-coreui-toggle="unfoldable"></button>
+      </div>
+    </div>

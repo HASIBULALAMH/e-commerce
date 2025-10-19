@@ -13,7 +13,19 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar',
     ];
+    
+    /**
+     * Save the model to the database.
+     *
+     * @param  array  $options
+     * @return bool
+     */
+    public function save(array $options = [])
+    {
+        return parent::save($options);
+    }
 
     protected $hidden = [
         'password',

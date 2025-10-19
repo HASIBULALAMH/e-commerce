@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            // Drop existing columns if they exist
+            // Drop existing columns if they exist (except subtotal which we'll keep)
             $columnsToDrop = [
                 'customer_id',
                 'receiver_name',
@@ -20,7 +20,6 @@ return new class extends Migration
                 'receiver_email',
                 'receiver_address',
                 'receiver_city',
-                'subtotal',
                 'Total',
                 'Payment_Method',
                 'Pay_Status'
@@ -34,49 +33,56 @@ return new class extends Migration
 
             // Add new columns if they don't exist
             if (!Schema::hasColumn('orders', 'user_id')) {
-                $table->foreignId('user_id')->nullable()->after('id');
+                $table->foreignId('user_id')->nullable();
             }
             if (!Schema::hasColumn('orders', 'name')) {
-                $table->string('name')->after('user_id');
+                $table->string('name');
             }
             if (!Schema::hasColumn('orders', 'email')) {
-                $table->string('email')->after('name');
+                $table->string('email');
             }
             if (!Schema::hasColumn('orders', 'phone')) {
-                $table->string('phone')->nullable()->after('email');
+                $table->string('phone')->nullable();
             }
             if (!Schema::hasColumn('orders', 'address')) {
-                $table->text('address')->after('phone');
+                $table->text('address');
             }
             if (!Schema::hasColumn('orders', 'city')) {
-                $table->string('city')->after('address');
+                $table->string('city');
             }
             if (!Schema::hasColumn('orders', 'postal_code')) {
-                $table->string('postal_code')->nullable()->after('city');
+                $table->string('postal_code')->nullable();
             }
+            // Add subtotal if it doesn't exist
             if (!Schema::hasColumn('orders', 'subtotal')) {
-                $table->decimal('subtotal', 12, 2)->after('postal_code');
+                $table->decimal('subtotal', 12, 2);
             }
+            
+            // Add shipping_cost after ensuring subtotal exists
             if (!Schema::hasColumn('orders', 'shipping_cost')) {
-                $table->decimal('shipping_cost', 10, 2)->default(0)->after('subtotal');
+                $table->decimal('shipping_cost', 10, 2)->default(0);
             }
             if (!Schema::hasColumn('orders', 'tax')) {
-                $table->decimal('tax', 10, 2)->default(0)->after('shipping_cost');
+                $table->decimal('tax', 10, 2)->default(0);
             }
             if (!Schema::hasColumn('orders', 'total')) {
-                $table->decimal('total', 12, 2)->after('tax');
+                $table->decimal('total', 12, 2);
             }
+            // First add payment_method if it doesn't exist
+            // Add payment_method if it doesn't exist
             if (!Schema::hasColumn('orders', 'payment_method')) {
-                $table->string('payment_method')->nullable()->after('total');
+                $table->string('payment_method')->nullable();
             }
+            
+            // Add payment_status if it doesn't exist
             if (!Schema::hasColumn('orders', 'payment_status')) {
-                $table->boolean('payment_status')->default(false)->after('payment_method');
+                $table->boolean('payment_status')->default(false);
             }
             if (!Schema::hasColumn('orders', 'transaction_id')) {
-                $table->string('transaction_id')->nullable()->after('payment_status');
+                $table->string('transaction_id')->nullable();
             }
             if (!Schema::hasColumn('orders', 'status')) {
-                $table->string('status')->default('pending')->after('transaction_id');
+                $table->string('status')->default('pending');
             }
 
             // Add foreign key constraints if they don't exist
