@@ -1,4 +1,10 @@
-<footer class="footer px-4">
-        <div><a href="https://coreui.io">CoreUI </a><a href="https://coreui.io/product/free-bootstrap-admin-template/">Bootstrap Admin Template</a> &copy; 2025 creativeLabs.</div>
-        <div class="ms-auto">Powered by&nbsp;<a href="https://coreui.io/bootstrap/docs/">CoreUI UI Components</a></div>
-      </footer>
+<footer class="footer px-4 py-3">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <strong>E-Commerce Admin</strong> © 2025
+        </div>
+        <div class="ms-auto">
+            Version 1.0.0
+        </div>
+    </div>
+</footer>

@@ -248,7 +248,7 @@
         </div>
         <div class="wrapper">
             <!-- login from-->
-            <form id="login" tabindex="500" action="{{route('customer.login')}}" method="" enctype="multipart/form-data">
+           <form id="login" tabindex="500" action="{{route('customer.login.submit')}}" method="POST">
                 @csrf
                 <h3>Login</h3>
                 <div class="mail">
@@ -269,16 +269,25 @@
             <form id="register" tabindex="502" action="{{route('customer.store')}}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <h3>Register</h3>
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <div class="name">
-                    <input type="text" name="name" required>
+                    <input type="text" name="name" value="{{ old('name') }}" required>
                     <label>Full Name</label>
                 </div>
                 <div class="mail">
-                    <input type="email" name="email" required>
+                    <input type="email" name="email" value="{{ old('email') }}" required>
                     <label>E-Mail</label>
                 </div>
                 <div class="uid">
-                    <input type="number" name="phone" required>
+                    <input type="text" name="phone" value="{{ old('phone') }}" required>
                     <label>phone </label>
                 </div>
                 <div class="passwd">
@@ -286,8 +295,8 @@
                     <label>Password</label>
                 </div>
                 <div class="passwd">
-                    <input type="password" name="password" required>
-                    <label>confram Password</label>
+                    <input type="password" name="password_confirmation" required>
+                    <label>Confirm Password</label>
                 </div>
                 <div class="submit">
                     <button class="dark">Register</button>

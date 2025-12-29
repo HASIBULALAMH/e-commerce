@@ -549,25 +549,21 @@
         });
     });
 
+    // -----------------------------
     // Order status update functions
+    // -----------------------------
     function updateOrderStatus(orderId, status, message) {
         if (confirm(message)) {
             const form = $('<form>', {
-                'method': 'POST',
-                'action': `{{ route('orders.status.update', '') }}/${orderId}`
+                method: 'POST',
+                action: `/admin/orders/status/update/${orderId}/${status}` // directly use URL pattern
             });
 
             const token = $('meta[name="csrf-token"]').attr('content');
             form.append($('<input>', {
-                'type': 'hidden',
-                'name': '_token',
-                'value': token
-            }));
-
-            form.append($('<input>', {
-                'type': 'hidden',
-                'name': 'status',
-                'value': status
+                type: 'hidden',
+                name: '_token',
+                value: token
             }));
 
             $('body').append(form);
@@ -583,6 +579,9 @@
         updateOrderStatus(orderId, 'cancelled', 'Are you sure you want to cancel this order?');
     }
 
+    // -----------------------------
+    // Bulk actions
+    // -----------------------------
     function processBulkAction() {
         const selectedOrders = $('.order-checkbox:checked').map(function() {
             return $(this).val();
@@ -600,7 +599,6 @@
         }
 
         if (action === 'export') {
-            // Handle export
             let paramsObj = {
                 orders: selectedOrders.join(',')
             };
@@ -619,27 +617,27 @@
 
         if (confirm(message)) {
             const form = $('<form>', {
-                'method': 'POST',
-                'action': '{{ route("orders.bulk-update") }}'
+                method: 'POST',
+                action: '{{ route("orders.bulk-update") }}'
             });
 
             const token = $('meta[name="csrf-token"]').attr('content');
             form.append($('<input>', {
-                'type': 'hidden',
-                'name': '_token',
-                'value': token
+                type: 'hidden',
+                name: '_token',
+                value: token
             }));
 
             form.append($('<input>', {
-                'type': 'hidden',
-                'name': 'orders',
-                'value': JSON.stringify(selectedOrders)
+                type: 'hidden',
+                name: 'orders',
+                value: JSON.stringify(selectedOrders)
             }));
 
             form.append($('<input>', {
-                'type': 'hidden',
-                'name': 'action',
-                'value': action
+                type: 'hidden',
+                name: 'action',
+                value: action
             }));
 
             $('body').append(form);
@@ -647,4 +645,5 @@
         }
     }
 </script>
+
 @endpush

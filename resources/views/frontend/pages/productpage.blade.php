@@ -1,4 +1,4 @@
-@extends('frontend.Master')
+@extends('frontend.master')
 @section('content')
 <main>
     <!-- Hero area Start-->
@@ -41,7 +41,7 @@
                                     <div class="properties-card">
                                         <div class="properties-img">
                                             <a href="{{ route('product.details', $product->id) }}">
-                                                <img src="{{('/uploads/products/'.$product->image) }}" alt="{{ $product->name }}">
+                                                <img src="{{ asset('uploads/products/'.$product->image) }}" alt="{{ $product->name }}">
                                             </a>
                                             <div class="socal_icon">
                                                 <a href="{{route('addto.cart',$product->id)}}"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-check-fill" viewBox="0 0 16 16">
@@ -61,9 +61,9 @@
                                             <h3><a href="{{ route('product.details', $product->id) }}">{{ $product->name }}</a></h3>
                                             <div class="properties-footer">
                                                 <div class="price">
-                                                    <span>${{ $product->price }}
-                                                        @if($product->original_price)
-                                                        <span>{{ $product->original_price }} BDT</span>
+                                                    <span>${{ number_format($product->price, 2) }}
+                                                        @if(!empty($product->original_price))
+                                                        <span class="original-price"><del>{{ number_format($product->original_price, 2) }} BDT</del></span>
                                                         @endif
                                                     </span>
                                                 </div>
@@ -78,7 +78,9 @@
                         <!-- Pagination -->
                         <div class="row">
                             <div class="col-12">
-                                {{ $products->links() }}
+                                @if(method_exists($products, 'links'))
+                                    {{ $products->links() }}
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -99,4 +101,5 @@
         </div>
     </a>
 </div>
+
 @endsection

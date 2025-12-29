@@ -23,21 +23,21 @@ class OrderListController extends Controller
         $dateRange = $request->date_range;
         $search = $request->search;
         $perPage = 15;
-        
+
         // Base query with relationships
         $query = Order::with(['orderDetails' => function($q) {
             $q->with('product');
         }, 'user'])->latest();
-        
+
         // Apply filters
         if ($status && $status !== 'all') {
             $query->where('status', $status);
         }
-        
+
         if ($paymentStatus !== null) {
             $query->where('payment_status', $paymentStatus);
         }
-        
+
         if ($dateRange) {
             $dates = explode(' - ', $dateRange);
             if (count($dates) === 2) {
@@ -57,7 +57,7 @@ class OrderListController extends Controller
                   });
             });
         }
-        
+
         // Get statistics
         $totalOrders = Order::count();
         $pendingOrders = Order::where('status', 'pending')->count();
@@ -71,19 +71,19 @@ class OrderListController extends Controller
         $lastMonthOrders = Order::whereMonth('created_at', now()->subMonth()->month)
             ->whereYear('created_at', now()->subMonth()->year)
             ->count();
-        
+
         $lastMonthPendingOrders = Order::where('status', 'pending')
             ->whereMonth('created_at', now()->subMonth()->month)
             ->whereYear('created_at', now()->subMonth()->year)
             ->count();
-        
+
         $lastMonthRevenue = Order::where('status', '!=', 'cancelled')
             ->whereMonth('created_at', now()->subMonth()->month)
             ->whereYear('created_at', now()->subMonth()->year)
             ->sum('total');
-        
+
         $orders = $query->paginate($perPage);
-        
+
         return view('backend.features.order.view', compact(
             'orders',
             'totalOrders',
@@ -112,7 +112,7 @@ class OrderListController extends Controller
             $subtotal = $order->orderDetails->sum(function($item) {
                 return ($item->price * $item->quantity) - $item->discount;
             });
-            
+
             $discount = $order->orderDetails->sum('discount');
             $shipping = $order->shipping_cost ?? 0;
             $tax = $order->tax ?? 0;
@@ -134,23 +134,12 @@ class OrderListController extends Controller
                 'statusHistories'
             ));
         } catch (\Exception $e) {
-            \Log::error('Error in OrderListController@show: ' . $e->getMessage());
+            Log::error('Error in OrderListController@show: ' . $e->getMessage());
             return redirect()->route('orders.list')->with('error', 'Error loading order details.');
         }
     }
-    
-    /**
-     * Display the status history for an order.
-     *
-     * @param  int  $id
-     * @return \Illuminate\View\View
-     */
-    /**
-     * Display the status history for an order.
-     *
-     * @param  int  $id
-     * @return \Illuminate\View\View
-     */
+
+    // Display status history for an order
     public function statusHistory($id)
     {
         $order = Order::findOrFail($id);
@@ -158,10 +147,10 @@ class OrderListController extends Controller
             ->with('changedBy')
             ->latest()
             ->paginate(10);
-            
+
         // Get allowed status transitions for the current status
         $allowedTransitions = $this->getAllowedStatusTransitions($order->status);
-            
+
         return view('backend.features.order.status-history', compact('order', 'statusHistories', 'allowedTransitions'));
     }
 
@@ -169,7 +158,7 @@ class OrderListController extends Controller
     {
         $order = Order::findOrFail($id);
         $order->update(['status' => 'confirmed']);
-        
+
         return redirect()->back()->with('success', 'Order confirmed successfully!');
     }
 
@@ -177,17 +166,11 @@ class OrderListController extends Controller
     {
         $order = Order::findOrFail($id);
         $order->update(['status' => 'cancelled']);
-        
+
         return redirect()->back()->with('success', 'Order cancelled successfully!');
     }
-    
-    /**
-     * Update the status of an order.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
+    // Update the status of an order.
+
     public function updateStatus(Request $request, $id)
     {
         try {
@@ -232,12 +215,8 @@ class OrderListController extends Controller
         }
     }
 
-    /**
-     * Get allowed status transitions for the current status.
-     *
-     * @param  string  $currentStatus
-     * @return array
-     */
+     //Get allowed status transitions for the current status.
+
     protected function getAllowedStatusTransitions($currentStatus)
     {
         $transitions = [
@@ -251,15 +230,8 @@ class OrderListController extends Controller
         return $transitions[$currentStatus] ?? [];
     }
 
-    /**
-     * Handle specific actions based on status change.
-     *
-     * @param  \App\Models\Order  $order
-     * @param  string  $newStatus
-     * @param  string  $previousStatus
-     * @param  \Illuminate\Http\Request  $request
-     * @return void
-     */
+     //Handle specific actions based on status change.
+
     protected function handleStatusChangeActions($order, $newStatus, $previousStatus, $request)
     {
         switch ($newStatus) {
@@ -297,22 +269,15 @@ class OrderListController extends Controller
         }
     }
 
-    /**
-     * Send notifications for status change.
-     *
-     * @param  \App\Models\Order  $order
-     * @param  string  $newStatus
-     * @param  string  $previousStatus
-     * @return void
-     */
+    // Send notifications for status change.
+
     protected function sendStatusNotifications($order, $newStatus, $previousStatus)
     {
-        // TODO: Implement notification system
-        // This could include:
-        // - Email notifications to customer
-        // - SMS notifications
-        // - Admin notifications
-        // - Integration with external services
+        // Example: Send email notification to customer
+        // Mail::to($order->user->email)->send(new OrderStatusChangedMail($order, $newStatus, $previousStatus));
+
+        // Example: Send SMS notification
+        // SmsService::send($order->user->phone, "Your order #{$order->id} status has been updated to {$newStatus}.");
     }
 
     public function bulkUpdate(Request $request)
@@ -336,10 +301,10 @@ class OrderListController extends Controller
             foreach ($orders as $order) {
                 if (in_array($status, $this->getAllowedStatusTransitions($order->status))) {
                     $previousStatus = $order->status;
-                    
+
                     // Update order status
                     $order->update(['status' => $status]);
-                    
+
                     // Create status history
                     OrderStatusHistory::create([
                         'order_id' => $order->id,
@@ -347,10 +312,10 @@ class OrderListController extends Controller
                         'notes' => 'Bulk status update',
                         'changed_by' => Auth::id(),
                     ]);
-                    
+
                     // Handle specific actions
                     $this->handleStatusChangeActions($order, $status, $previousStatus, $request);
-                    
+
                     // Send notifications
                     $this->sendStatusNotifications($order, $status, $previousStatus);
                 }
@@ -374,11 +339,11 @@ class OrderListController extends Controller
         if ($request->status && $request->status !== 'all') {
             $query->where('status', $request->status);
         }
-        
+
         if ($request->payment_status !== null) {
             $query->where('payment_status', $request->payment_status);
         }
-        
+
         if ($request->date_range) {
             $dates = explode(' - ', $request->date_range);
             if (count($dates) === 2) {
@@ -436,14 +401,14 @@ class OrderListController extends Controller
         }
 
         $filename = 'orders-export-' . date('Y-m-d-H-i-s') . '.csv';
-        
+
         $handle = fopen('php://temp', 'r+');
         fputcsv($handle, $headers);
-        
+
         foreach ($rows as $row) {
             fputcsv($handle, $row);
         }
-        
+
         rewind($handle);
         $csv = stream_get_contents($handle);
         fclose($handle);

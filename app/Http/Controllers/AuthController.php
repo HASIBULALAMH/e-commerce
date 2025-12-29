@@ -25,10 +25,10 @@ class AuthController extends Controller
             return redirect()->back();
         }
 
-        
+
         // dd($request->all());
         $credentials = $request->except('_token');
-        
+
         $check = Auth::attempt($credentials);
         if ($check) {
             notify()->success('successfully login');
@@ -39,10 +39,13 @@ class AuthController extends Controller
         }
     }
 
-    public function logout()
-    {
-        Auth::logout();
-        notify()->success('successfully logout');
-        return redirect()->route('login');
-    }
+   public function logout()
+{
+    Auth::logout();
+    notify()->success('Successfully logged out');
+    return redirect()->route('login');
 }
+
+
+}
+

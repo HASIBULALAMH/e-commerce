@@ -1,81 +1,290 @@
 <!DOCTYPE html>
-<!--
-* CoreUI - Free Bootstrap Admin Template
-* @version v5.3.0
-* @link https://coreui.io/product/free-bootstrap-admin-template/
-* Copyright (c) 2025 creativeLabs Łukasz Holeczek
-* Licensed under MIT (https://github.com/coreui/coreui-free-bootstrap-admin-template/blob/main/LICENSE)
--->
-
 <html lang="en">
-  <head>
+<head>
     <base href="./">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
-    <meta name="author" content="Łukasz Holeczek">
-    <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
-    <title>CoreUI Free Bootstrap Admin Template</title>
-    <link rel="apple-touch-icon" sizes="57x57" href="{{asset('assets/favicon/apple-icon-57x57.png')}}">
-    <link rel="apple-touch-icon" sizes="60x60" href="{{asset('assets/favicon/apple-icon-60x60.png')}}">
-    <link rel="apple-touch-icon" sizes="72x72" href="{{asset('assets/favicon/apple-icon-72x72.png')}}">
-    <link rel="apple-touch-icon" sizes="76x76" href="{{asset('assets/favicon/apple-icon-76x76.png')}}">
-    <link rel="apple-touch-icon" sizes="114x114" href="{{asset('assets/favicon/apple-icon-114x114.png')}}">
-    <link rel="apple-touch-icon" sizes="120x120" href="{{asset('assets/favicon/apple-icon-120x120.png')}}">
-    <link rel="apple-touch-icon" sizes="144x144" href="{{asset('assets/favicon/apple-icon-144x144.png')}}">
-    <link rel="apple-touch-icon" sizes="152x152" href="{{asset('assets/favicon/apple-icon-152x152.png')}}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{asset('assets/favicon/apple-icon-180x180.png')}}">
-    <link rel="icon" type="image/png" sizes="192x192" href="{{asset('assets/favicon/android-icon-192x192.png')}}">
+    <title>@yield('title', 'Admin Dashboard - E-Commerce')</title>
+
+    <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{asset('assets/favicon/favicon-32x32.png')}}">
-    <link rel="icon" type="image/png" sizes="96x96" href="{{asset('assets/favicon/favicon-96x96.png')}}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('assets/favicon/favicon-16x16.png')}}">
-    <link rel="manifest" href="{{asset('assets/favicon/manifest.json')}}">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="{{asset('assets/favicon/ms-icon-144x144.png')}}">
-    <meta name="theme-color" content="#ffffff">
-    @vite(['resources/scss/style.scss', 'resources/css/app.css', 'resources/js/app.js'])
-    <!-- Vendors styles-->
-    <link rel="stylesheet" href="{{asset('node_modules/simplebar/dist/simplebar.css')}}">
-    <link rel="stylesheet" href="{{asset('css/vendors/simplebar.css')}}">
-    <!-- Main styles for this application-->
-    <link href="{{asset('css/style.css')}}" rel="stylesheet">
-    <!-- We use those styles to show code examples, you should remove them in your application.-->
-    <link href="{{asset('css/examples.css')}}" rel="stylesheet">
-    <script src="{{asset('js/config.js')}}"></script>
-    <script src="{{asset('js/color-modes.js')}}"></script>
-    <link href="{{asset('node_modules/@coreui/chartjs/dist/css/coreui-chartjs.css')}}" rel="stylesheet">
-  </head>
-  <body>
-   @include('backend.fixed.sidebar')
-    <div class="wrapper d-flex flex-column min-vh-100">
-   @include('backend.fixed.header')
-      <div class="body flex-grow-1">
-      
-      @yield('content')
-      </div>
-      <!-- footer-->
-      @include('backend.fixed.footer')
-    </div>
-    <!-- CoreUI and necessary plugins-->
-    <script src="{{asset('node_modules/@coreui/coreui/dist/js/coreui.bundle.min.js')}}"></script>
-    <script src="{{asset('node_modules/simplebar/dist/simplebar.min.js')}}"></script>
-    <script>
-      const header = document.querySelector('header.header');
-      
-      document.addEventListener('scroll', () => {
-        if (header) {
-          header.classList.toggle('shadow-sm', document.documentElement.scrollTop > 0);
+
+    <!-- Bootstrap CSS from CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --cui-primary: #321fdb;
+            --cui-secondary: #9da5b1;
+            --cui-success: #2eb85c;
+            --cui-info: #39f;
+            --cui-warning: #f9b115;
+            --cui-danger: #e55353;
         }
-      });
-      
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #f8f9fa;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1030;
+            width: 256px;
+            background: #1e1e2d;
+            overflow-y: auto;
+            transition: all 0.3s;
+        }
+
+        .sidebar-header {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            color: #fff;
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+            list-style: none;
+        }
+
+        .nav-item {
+            margin: 0.25rem 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+            border-radius: 0.375rem;
+            margin: 0 0.5rem;
+        }
+
+        .nav-link:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link.active {
+            color: #fff;
+            background: var(--cui-primary);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 0.75rem;
+            stroke: currentColor;
+        }
+
+        /* Main Wrapper */
+        .wrapper {
+            margin-left: 256px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s;
+        }
+
+        /* Header */
+        .header {
+            background: #fff;
+            border-bottom: 1px solid #d8dbe0;
+            position: sticky;
+            top: 0;
+            z-index: 1020;
+        }
+
+        .header .container-fluid {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+        }
+
+        .header-toggler {
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            display: none;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header-nav .nav-link {
+            padding: 0.5rem 1rem;
+            color: #4f5d73;
+            text-decoration: none;
+        }
+
+        .header-nav .nav-link:hover {
+            color: var(--cui-primary);
+        }
+
+        /* Body Content */
+        .body {
+            flex: 1;
+            padding: 1.5rem 0;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: auto;
+            padding: 1rem;
+            background: #fff;
+            border-top: 1px solid #d8dbe0;
+        }
+
+        /* Cards */
+        .card {
+            border: 1px solid #d8dbe0;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background: transparent;
+            margin: 0;
+            padding: 0.5rem 0;
+        }
+
+        .breadcrumb-item a {
+            color: var(--cui-primary);
+            text-decoration: none;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-256px);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .wrapper {
+                margin-left: 0;
+            }
+
+            .header-toggler {
+                display: block;
+            }
+        }
+
+        /* Dropdown */
+        .dropdown-menu {
+            border: 1px solid #d8dbe0;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+        }
+
+        .dropdown-item:hover {
+            background: #f8f9fa;
+        }
+
+        /* Avatar */
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+    </style>
+
+    @stack('styles')
+</head>
+<body>
+    @include('backend.fixed.sidebar')
+
+    <div class="wrapper d-flex flex-column min-vh-100">
+        @include('backend.fixed.header')
+
+        <div class="body grow">
+            @yield('content')
+        </div>
+
+        @include('backend.fixed.footer')
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+
+    <!-- Custom Scripts -->
+    <script>
+        // Mobile sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('show');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.querySelector('.sidebar');
+            const toggler = document.querySelector('.header-toggler');
+
+            if (window.innerWidth <= 992) {
+                if (!sidebar.contains(event.target) && !toggler.contains(event.target)) {
+                    sidebar.classList.remove('show');
+                }
+            }
+        });
+
+        // Header shadow on scroll
+        const header = document.querySelector('.header');
+        window.addEventListener('scroll', () => {
+            if (header) {
+                if (window.scrollY > 0) {
+                    header.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+                } else {
+                    header.style.boxShadow = 'none';
+                }
+            }
+        });
     </script>
-    <!-- Plugins and scripts required by this view-->
-    <script src="{{asset('node_modules/chart.js/dist/chart.umd.js')}}"></script>
-    <script src="{{asset('node_modules/@coreui/chartjs/dist/js/coreui-chartjs.js')}}"></script>
-    <script src="{{asset('node_modules/@coreui/utils/dist/umd/index.js')}}"></script>
-    <script src="{{asset('js/main.js')}}"></script>
-    <script> 
-    </script>
-  </body>
+
+    @stack('scripts')
+</body>
 </html>

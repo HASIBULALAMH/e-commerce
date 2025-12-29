@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
-use App\Models\customer;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Symfony\Contracts\Service\Attribute\Required;
 
 class CustomerController extends Controller
 {
@@ -16,62 +15,68 @@ class CustomerController extends Controller
     }
 
     public function store(Request $request){
-            
-
-        $customer = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:25',
-            'email' => 'required|email',
-            'phone' => 'required|numeric|min:11',
-            'password' => 'required|string'
+            'email' => 'required|email|unique:customers,email',
+            'phone' => 'required|digits:11|unique:customers,phone',
+            'password' => 'required|string|min:6|confirmed'
         ]);
-            //  dd($customer->getMessageBag());
-           
-             if ($customer->fails()){
-             //dd($customer->getMessageBag());
-             toastr()->error('invalid cradintials');
-                return redirect()->back();
-            }
-        
-       // dd($request->all());
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
 
         Customer::create([
-            "name"=>$request->name,
-            "email"=>$request->email,
-            "phone"=>$request->phone,
-            "password"=>bcrypt($request->password),
+            "name" => $request->name,
+            "email" => $request->email,
+            "phone" => $request->phone,
+            "password" => bcrypt($request->password),
         ]);
-        return redirect()->route('Home');
 
+        toastr()->success('Registration successful! Please login.');
+        return redirect()->route('customer.login');
     }
-    public function login(Request $request){
 
-        $customer = Validator::make($request->all(), [
+    // Show login form
+    public function login(){
+        return view('frontend.auth.register');
+    }
+
+    // Handle login submission
+    public function loginSubmit(Request $request){
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required|string'
         ]);
 
-         if ($customer->fails()) {
-        // dd($customer->getMessageBag());
-        toastr()->error('Invalid credentials');
-        return redirect()->back();
-     }
+        if ($validator->fails()) {
+            toastr()->error('Invalid credentials');
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
 
+        $credentials = $request->only('email', 'password');
 
-        $credentials = $request->except('_token');
-        $check = auth('customerg')->attempt($credentials);
-        if($check){
+        if(auth('customerg')->attempt($credentials)){
             toastr()->success('Successfully logged in');
             return redirect()->route('customer.profile');
-        }
-        else{
+        } else {
             toastr()->error('Invalid email or password');
-            return redirect()->route('Home');
+            return redirect()->back()->withInput();
         }
+    }
 
+    public function logout(){
+        auth('customerg')->logout();
+        toastr()->success('Successfully logged out');
+        return redirect()->route('Home');
     }
 
     public function profile(){
         return view('frontend.customer.profile');
     }
-
+    
 }

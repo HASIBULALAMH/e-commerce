@@ -55,19 +55,19 @@ Route::group(['middleware' => 'customerg'], function () {
 | Admin Routes
 |--------------------------------------------------------------------------
 */
-Route::prefix('admin')->group(function () {
-    // Authentication Routes
-    Route::get('/login', [AuthController::class, 'login'])->name('admin.login');
-    Route::post('/submit', [AuthController::class, 'loginsubmit'])->name('login.submit');
 
-    // Admin protected routes
+ // Admin Authentication
+    Route::get('/login', [AuthController::class, 'login'])->name('login');
+     Route::post('/submit', [AuthController::class, 'loginsubmit'])->name('login.submit');
+
+ Route::prefix('admin')->group(function () {
+
+    // Protected routes
     Route::middleware(['auth'])->group(function () {
-        // Logout
         Route::get('/logout', [AuthController::class, 'logout'])->name('admin.logout');
-
         // Dashboard Routes - Multiple routes for same dashboard
         Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
-        
+
         // Profile Routes
         Route::prefix('profile')->group(function () {
             Route::get('/', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
@@ -107,9 +107,9 @@ Route::prefix('admin')->group(function () {
 
         // Order Management Routes
         Route::prefix('orders')->group(function () {
-            Route::get('/', [OrderListController::class, 'index'])->name('order.list');
+            Route::get('/', [OrderListController::class, 'list'])->name('orders.list');
             Route::get('/view/{id}', [OrderListController::class, 'show'])->name('order.view');
-            Route::get('/status/update/{id}/{status}', [OrderListController::class, 'updateStatus'])->name('order.status.update');
+            Route::get('/status/update/{id}/{status}', [OrderListController::class, 'updateStatus'])->name('orders.status.update');
             Route::post('/{order}/status-history', [OrderListController::class, 'statusHistory'])->name('orders.status.history');
             Route::post('/{order}/confirm', [OrderListController::class, 'confirm'])->name('orders.confirm');
             Route::post('/{order}/cancel', [OrderListController::class, 'cancel'])->name('orders.cancel');
