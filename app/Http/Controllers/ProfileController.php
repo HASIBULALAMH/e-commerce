@@ -14,30 +14,22 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    /**
-     * Show the user's profile.
-     *
-     * @return View
-     */
+   // Show the user's profile.
+
     public function edit(): View
     {
         $user = Auth::user();
         return view('backend.profile.edit', compact('user'));
     }
 
-    /**
-     * Update the user's profile information.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Request  $request
-     * @return RedirectResponse
-     */
+    //Update the user's profile information.
+
     public function update(Request $request): RedirectResponse
     {
-// Get the authenticated user with proper type hinting
+        // Get the authenticated user with proper type hinting
         /** @var User $user */
         $user = Auth::user();
-        
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
@@ -52,7 +44,7 @@ class ProfileController extends Controller
             if ($user->avatar) {
                 Storage::delete('public/avatars/' . basename($user->avatar));
             }
-            
+
             $avatar = $request->file('avatar');
             $filename = 'avatar-' . Str::uuid() . '.' . $avatar->getClientOriginalExtension();
             $path = $avatar->storeAs('public/avatars', $filename);
@@ -62,12 +54,12 @@ class ProfileController extends Controller
         // Update user data
         $user->name = $validated['name'];
         $user->email = $validated['email'];
-        
+
         // Update password if provided
         if (!empty($validated['new_password'])) {
             $user->password = Hash::make($validated['new_password']);
         }
-        
+
         // Save the user model
         $user->save();
 

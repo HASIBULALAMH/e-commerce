@@ -39,8 +39,7 @@
                                             <td>{{ $brands->name }}</td>
                                             <td>{{ $brands->description }}</td>
                                             <td>
-                                                <img src="{{ '/uploads/brands/'.$brands->logo }}" alt="Brand Logo"
-                                                    style="width: 50px; height: 50px; border-radius: 5px;">
+                                                <img src="{{ asset('uploads/brands/' . ($brands->logo ?? 'default.png')) }}" alt="Brand Logo" style="width: 50px; height: 50px; border-radius: 5px;">
                                             </td>
                                             <td>
                                                 @if($brands->status == 'active')
