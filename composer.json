@@ -1,5 +1,4 @@
 {
-    "$schema": "https://json.schemastore.org/composer.json",
     "name": "laravel/laravel",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
