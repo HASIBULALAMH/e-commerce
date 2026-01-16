@@ -7,10 +7,11 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\frontend\BrandController as FrontendBrandController;
 use App\Http\Controllers\frontend\CustomerController;
 use App\Http\Controllers\frontend\HomeController;
-use App\Http\Controllers\frontend\OrderConteoller;
+use App\Http\Controllers\frontend\OrderController;  // ✅ ADD THIS LINE
 use App\Http\Controllers\frontend\ProductController as FrontendProductController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderListController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,15 +40,15 @@ Route::get('/product/details/{id}', [FrontendProductController::class, 'view'])-
 Route::get('/product/list', [FrontendProductController::class, 'listview'])->name('product.listview');
 
 // Add to cart
-Route::get('/addtocart/{product}', [OrderConteoller::class, 'addtocart'])->name('addto.cart');
+Route::get('/addtocart/{product}', [OrderController::class, 'addtocart'])->name('addto.cart');
 
 // Customer protected routes
 Route::group(['middleware' => 'customerg'], function () {
     Route::post('/customer/logout', [CustomerController::class, 'logout'])->name('customer.logout');
-    Route::get('/cart/view', [OrderConteoller::class, 'view'])->name('cart.view');
-    Route::get('cart/checkout', [OrderConteoller::class, 'checkout'])->name('cart.checkout');
+    Route::get('/cart/view', [OrderController::class, 'view'])->name('cart.view');
+    Route::get('cart/checkout', [OrderController::class, 'checkout'])->name('cart.checkout');
     Route::get('/customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
-    Route::post('/placeorder/store', [OrderConteoller::class, 'storeaddorder'])->name('placeorder.store');
+    Route::post('/placeorder/store', [OrderController::class, 'storeaddorder'])->name('placeorder.store');
 });
 
 /*
@@ -70,8 +71,8 @@ Route::group(['middleware' => 'customerg'], function () {
 
         // Profile Routes
         Route::prefix('profile')->group(function () {
-            Route::get('/', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
-            Route::put('/', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+            Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
+            Route::put('/', [ProfileController::class, 'update'])->name('profile.update');
         });
 
         // Category Routes
